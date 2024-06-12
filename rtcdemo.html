@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+	<style>
+	#line {
+		position: absolute;
+		width:100%;
+		height:1px;
+		background-color: black;
+		top:200px;
+	}
+	#line2 {
+		position: absolute;
+		top:calc(200px + 100vw / 1.58);
+	}
+	#video {
+	  border: 1px solid black;
+	  box-shadow: 2px 2px 3px black;
+	  width: 100%;
+	  height: auto;
+	}
+
+	#photo {
+	  border: 1px solid black;
+	  box-shadow: 2px 2px 3px black;
+	  width: 320px;
+	  height: 240px;
+	}
+
+	#canvas {
+	  display: none;
+	}
+
+	#img,#img2 {
+		width: 100%;
+		height: auto;
+	}
+	#span {
+		width: 100%;
+		height: auto;
+	}
+
+	.output {
+	  width: 340px;
+	  display: inline-block;
+	  vertical-align: top;
+	}
+
+	#startbutton {
+	  display: block;
+	  position: relative;
+	  margin-left: auto;
+	  margin-right: auto;
+	  bottom: 32px;
+	  background-color: rgba(0, 150, 0, 0.5);
+	  border: 1px solid rgba(255, 255, 255, 0.7);
+	  box-shadow: 0px 0px 1px 2px rgba(0, 0, 0, 0.2);
+	  font-size: 14px;
+	  font-family: "Lucida Grande", "Arial", sans-serif;
+	  color: rgba(255, 255, 255, 1);
+	}
+
+	.contentarea {
+	  font-size: 16px;
+	  font-family: "Lucida Grande", "Arial", sans-serif;
+	  width: 760px;
+	}
+
+	</style>
+	
+</head>
+<body>
+    <video id="video" playsInline x5-playsinline="true" webkit-playsinline="true">视频流目前不可用。</video>
+    <button id="startbutton">拍摄照片</button>
+	<img id="img">
+	<img id="img2">
+	<span id="span"></span>
+  <canvas id="canvas"> </canvas>
+</div>
+<script>
+	 window.onload = function(){
+		const viewportWidth = window.innerWidth
+			let points = {
+				startX: viewportWidth * 0.05,
+				startY: 200,
+				endX: viewportWidth * 0.95,
+				endY:  200 + viewportWidth * 0.59
+			}
+			let imgUrl = null;
+		window.navigator.mediaDevices.getUserMedia({
+				  video: {
+					width: { ideal: 1280 },
+					height: { ideal: 720 },
+					facingMode: 'environment'
+				  }
+				  }).then(function(stream) {
+				  var video = document.getElementsByTagName('video')[0];
+				  video.height = "auto";
+				  video.srcObject = stream;
+				  video.play();
+				  video.addEventListener('canplay', e =>{
+					cutImg(video, points, document.querySelector('#canvas'))
+				  })
+			})
+			
+		function cutImg (nodeParam, points, canvasDom) {
+	return new Promise((resolve) => {
+		// 获取 图片/视频高度和宽度，需要和视口比例做匹配，canvas绘制时根据 图片/视频 的原高和宽进行裁剪
+		const originWidth = nodeParam.naturalWidth || nodeParam.videoWidth ;
+		const originHeight = nodeParam.naturalHeight || nodeParam.videoHeight ;
+		const viewportWidth = window.innerWidth || DEFAULT_VIEWPORT_WIDTH;
+		const viewportHeight = window.innerHeight || DEFAULT_VIEWPORT_HEIGHT;
+
+		// 按高度缩放
+		let scale = viewportHeight / originHeight;
+
+		const { startX = 0, startY = 0, endX = DEFAULT_VIEWPORT_WIDTH, endY = DEFAULT_VIEWPORT_HEIGHT } = points || {};
+
+		let context = canvasDom.getContext('2d');
+		// 裁剪后的高度，身份证宽高比1.58，上下识别区域多30%
+		const outputHeight = originWidth / (1.58 * 0.7)
+		canvasDom.width = originWidth;
+		canvasDom.height = outputHeight;
+		context.drawImage(nodeParam, startX * scale, startY * scale, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
+		imgUrl2 = canvasDom.toDataURL()
+		document.querySelector('#img2').src = imgUrl2
+
+		// 将裁剪后的图片转换为文件流
+		// canvasDom.toBlob(function(blob) {
+		// 	context = null
+		// 	resolve(blob)
+		// });
+	})
+}
+document.querySelector('#startbutton').addEventListener('click',e=>{
+	cutImg(document.querySelector('#video'),points,document.querySelector('#canvas'))
+})
+
+		setInterval( async ()=> {
+			cutImg(document.querySelector('#video'),points,document.querySelector('#canvas'))
+					// 创建 AudioContext 实例
+		const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+		
+		// 创建一个音频源节点
+		const response = await fetch('./di.mp3')
+		const arrbuffer = await response.arrayBuffer()
+		audioContext.decodeAudioData(arrbuffer).then(buffer => {
+			const source = audioContext.createBufferSource()
+			source.connect(audioContext.destination)
+			source.buffer = buffer
+			source.loop = false
+			source.start()
+		})
+		},6000)
+
+
+		
+
+
+	 }
+
+</script>
+</body>
+</html>`
