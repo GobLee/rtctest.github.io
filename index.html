@@ -79,13 +79,6 @@
       text-align: center;
       background-color: #ccc;
     }
-    .am-modal-popup {
-      position: absolute;
-      top:500px;
-      left: 0;
-      z-index:99;
-      transform: translateZ(-1);
-    }
   </style>
 </head>
 
@@ -202,6 +195,7 @@
           canvasDom.height = outputHeight;
           context.drawImage(nodeParam, startX * scale, startY * scale, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
           imgUrl2 = canvasDom.toDataURL()
+          console.log(imgUrl2)
           document.querySelector('#img2').src = imgUrl2
 
           // 将裁剪后的图片转换为文件流
