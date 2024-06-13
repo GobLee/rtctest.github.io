@@ -101,6 +101,7 @@
           console.log(e)
         }
         const success = function (){
+          console.log('成功')
       navigator.mediaDevices.enumerateDevices().then(res => {
         const deviceList = []
         res.map(item => {
@@ -159,7 +160,9 @@
       })
     }
         //调用用户媒体设备, 访问摄像头
-        navigator.mediaDevices.getUserMedia({video: {width: 480, height: 320}}, success, error);
+        navigator.mediaDevices.getUserMedia({video: {width: 480, height: 320}}).then(()=>{
+          success()
+        });
     } else {
           alert('不支持访问用户媒体');
       }
