@@ -183,8 +183,7 @@
           // 获取 图片/视频高度和宽度，需要和视口比例做匹配，canvas绘制时根据 图片/视频 的原高和宽进行裁剪
           const originWidth = nodeParam.naturalWidth || nodeParam.videoWidth;
 
-          // 按高度缩放
-          let scale = viewportHeight / originHeight;
+
 
           const { startX = 0, startY = 0} = points || {};
 
@@ -206,6 +205,8 @@
         })
       }
       document.querySelector('#startbutton').addEventListener('click', e => {
+        console.log('e','ddd');
+        
         cutImg(document.querySelector('#video'), points, document.querySelector('#canvas'))
       })
     }
