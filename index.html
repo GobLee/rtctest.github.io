@@ -31,6 +31,10 @@
       height: 40px;
     }
 
+    canvas {
+      display: none;
+    }
+
     img {
       width: 100%;
     }
@@ -196,7 +200,7 @@
           context.drawImage(nodeParam, startX * scale, startY * scale, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
           imgUrl2 = canvasDom.toDataURL()
           console.log(imgUrl2)
-          document.querySelector('#img2').src = imgUrl2
+          document.querySelector('#img').src = imgUrl2
 
           // 将裁剪后的图片转换为文件流
           // canvasDom.toBlob(function(blob) {
