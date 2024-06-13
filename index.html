@@ -99,7 +99,7 @@
      <button id="showModalButton">Show Modal</button>
   <script>
     window.onload = function () {
-      alert('1-8')
+      alert('1-9')
       console.log(document.getElementById('modal'))
       // 初始化
       var vConsole = new VConsole();
@@ -199,10 +199,12 @@
           console.log(canvasDom.width,canvasDom.height)
           console.log(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight)
           context.drawImage(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
-          
-          imgUrl2 = canvasDom.toDataURL("image/png", 0.8)
+          setTimeout(()=>{
+            imgUrl2 = canvasDom.toDataURL("image/png", 0.8)
           console.log(imgUrl2)
           document.querySelector('#img').src = imgUrl2
+          },2000)
+
         } catch (error) {
            console.log('e',error);
             
