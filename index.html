@@ -198,7 +198,9 @@
           canvasDom.height = outputHeight;
           console.log(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight)
           context.drawImage(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
+          
           imgUrl2 = canvasDom.toDataURL()
+          console.log(imgUrl2)
           document.querySelector('#img').src = imgUrl2
         } catch (error) {
            console.log('e',error);
