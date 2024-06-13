@@ -98,7 +98,7 @@
      <button id="showModalButton">Show Modal</button>
   <script>
     window.onload = function () {
-      alert('1-2')
+      alert('1-3')
       console.log(document.getElementById('modal'))
       // 初始化
       var vConsole = new VConsole();
@@ -193,6 +193,7 @@
           const outputHeight = originWidth / (1.58 * 0.7)
           canvasDom.width = originWidth;
           canvasDom.height = outputHeight;
+          console.log(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight)
           context.drawImage(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
           imgUrl2 = canvasDom.toDataURL()
           document.querySelector('#img').src = imgUrl2
