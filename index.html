@@ -168,11 +168,13 @@
 
             const modal = (
                 <Modal
-                    visible
-                    transparent
-                    maskClosable
-                    onClose={onClose}
-                    title="Modal"
+                  popup
+                  visible
+                  transparent
+                  maskClosable
+                  animationType="slide-up"
+                  onClose={onClose}
+                  title="Modal"
                 >
                     <div>This is a modal</div>
                 </Modal>
