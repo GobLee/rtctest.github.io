@@ -91,6 +91,7 @@
   <video id="video" playsInline x5-playsinline="true" webkit-playsinline="true">视频流目前不可用。</video>
   <div>
     <button id="startbutton">拍摄照片</button>
+    <button id="stopCamera">停止拍摄</button>
   </div>
   <img id="img">
   <canvas id="canvas"> </canvas>
@@ -98,7 +99,7 @@
      <button id="showModalButton">Show Modal</button>
   <script>
     window.onload = function () {
-      alert('1-4')
+      alert('1-5')
       console.log(document.getElementById('modal'))
       // 初始化
       var vConsole = new VConsole();
@@ -208,6 +209,12 @@
         console.log('e','ddd');
         
         cutImg(document.querySelector('#video'), points, document.querySelector('#canvas'))
+      })
+      document.querySelector('#stopCamera').addEventListener('click', e => {
+        document.querySelector('#video').srcObject.getTracks().forEach(track => {
+          track.stop()
+        })
+        document.querySelector('#video').srcObject = null
       })
     }
   </script>
