@@ -157,7 +157,7 @@
       })
     }
         //调用用户媒体设备, 访问摄像头
-        getUserMedia({video: {width: 480, height: 320}}, success, error);
+        navigator.mediaDevices.getUserMedia({video: {width: 480, height: 320}}, success, error);
     } else {
           alert('不支持访问用户媒体');
       }
