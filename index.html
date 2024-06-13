@@ -97,7 +97,9 @@
       // 初始化
       var vConsole = new VConsole();
       if (navigator.mediaDevices.getUserMedia) {
-
+        const error = (e) => {
+          console.log(e)
+        }
         const success = function (){
       navigator.mediaDevices.enumerateDevices().then(res => {
         const deviceList = []
