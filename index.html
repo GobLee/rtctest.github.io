@@ -99,7 +99,7 @@
      <button id="showModalButton">Show Modal</button>
   <script>
     window.onload = function () {
-      alert('1-9')
+      alert('1-1')
       console.log(document.getElementById('modal'))
       // 初始化
       var vConsole = new VConsole();
@@ -199,12 +199,22 @@
           console.log(canvasDom.width,canvasDom.height)
           console.log(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight)
           context.drawImage(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
-          setTimeout(()=>{
-            imgUrl2 = canvasDom.toDataURL("image/png", 0.8)
-          console.log(imgUrl2)
-          document.querySelector('#img').src = imgUrl2
-          },2000)
-
+          // setTimeout(()=>{
+          //   imgUrl2 = canvasDom.toDataURL("image/png", 0.8)
+          // console.log(imgUrl2)
+          // document.querySelector('#img').src = imgUrl2
+          // },2000)
+          canvas.toBlob(function(blob) {
+          var reader = new FileReader();
+          reader.onload = function() {
+              var base64data = reader.result;
+              console.log('base64',base64data);
+              
+              document.querySelector('#img').src = base64data
+              // 使用base64data进行展示操作
+          };
+          reader.readAsDataURL(blob);
+        }, 'image/png');
         } catch (error) {
            console.log('e',error);
             
