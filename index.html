@@ -175,31 +175,25 @@
       let points = {
         startX: viewportWidth * 0.05,
         startY: 200,
-        endX: viewportWidth * 0.95,
-        endY: 200 + viewportWidth * 0.59
       }
 
       function cutImg(nodeParam, points, canvasDom) {
         return new Promise((resolve) => {
           // 获取 图片/视频高度和宽度，需要和视口比例做匹配，canvas绘制时根据 图片/视频 的原高和宽进行裁剪
           const originWidth = nodeParam.naturalWidth || nodeParam.videoWidth;
-          const originHeight = nodeParam.naturalHeight || nodeParam.videoHeight;
-          const viewportWidth = window.innerWidth || DEFAULT_VIEWPORT_WIDTH;
-          const viewportHeight = window.innerHeight || DEFAULT_VIEWPORT_HEIGHT;
 
           // 按高度缩放
           let scale = viewportHeight / originHeight;
 
-          const { startX = 0, startY = 0, endX = DEFAULT_VIEWPORT_WIDTH, endY = DEFAULT_VIEWPORT_HEIGHT } = points || {};
+          const { startX = 0, startY = 0} = points || {};
 
           let context = canvasDom.getContext('2d');
           // 裁剪后的高度，身份证宽高比1.58，上下识别区域多30%
           const outputHeight = originWidth / (1.58 * 0.7)
           canvasDom.width = originWidth;
           canvasDom.height = outputHeight;
-          context.drawImage(nodeParam, startX * scale, startY * scale, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
+          context.drawImage(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
           imgUrl2 = canvasDom.toDataURL()
-          console.log(imgUrl2)
           document.querySelector('#img').src = imgUrl2
 
           // 将裁剪后的图片转换为文件流
