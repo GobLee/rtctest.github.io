@@ -34,6 +34,50 @@
     img {
       width: 100%;
     }
+
+    .popup-content {
+      width: 100%;
+      height: 400px;
+    }
+
+    .popup {
+      position: fixed;
+      bottom:0;
+      height: 100vh;
+      width: 100vw;
+      pointer-events: none;
+      transform: translateZ(0);
+      background-color: #f5f5f5;
+      z-index: 9999;
+    }
+
+    .popup-cont {
+      position: absolute;
+      bottom: 0;
+      width: 100vw;
+      overflow: hidden;
+      z-index: 9999;
+      transform: translateZ(0);
+    }
+
+    .popup-wrap {
+      position: fixed;
+      bottom:0;
+      height: 100vh;
+      width: 100vw;
+      /* pointer-events: none; */
+      background-color: rgba(222,222,222,.2);
+      transform: translateZ(0);
+      z-index: 9999;
+    }
+
+    .camera, .album {
+      width: 100%;
+      height: 100px;
+      line-height: 100px;
+      text-align: center;
+      background-color: #ccc;
+    }
   </style>
 </head>
 
@@ -153,17 +197,17 @@
   </script>
   <script type="text/babel">
  setTimeout(function() {
-    console.log(111,document.getElementById('showModalButton'))
-    document.getElementById('showModalButton').addEventListener('click', e => {
-        const modalContainer = document.createElement('div');
-        document.body.appendChild(modalContainer);
 
-        function onClose() {
+
+
+
+        document.getElementById('showModalButton').addEventListener('click', function () {
+          const modalContainer = document.createElement('div');
+        document.body.appendChild(modalContainer);
+          function onClose() {
             ReactDOM.unmountComponentAtNode(modalContainer);
             document.body.removeChild(modalContainer);
         }
-
-        document.getElementById('showModalButton').addEventListener('click', function () {
             const Modal = window['antd-mobile'].Modal;
 
             const modal = (
@@ -176,13 +220,47 @@
                   onClose={onClose}
                   title="Modal"
                 >
-                    <div>This is a modal</div>
+                    <div class='popup-content'>
+                      <button id="popup">弹出层</button>
+                    </div>
                 </Modal>
             );
 
+            
+
             ReactDOM.render(modal, modalContainer);
+            document.getElementById('popup').addEventListener('click', function () {
+              const popupCont = document.createElement('div');
+              popupCont.classList.add('popup-wrap')
+              document.body.appendChild(popupCont);
+
+              const popup = (
+                  <div class="popup-cont">
+                    <div class="camera">拍摄</div>
+                    <div class="album">相册</div>
+                  </div>
+              )
+
+
+              ReactDOM.render(popup, popupCont);
+             setTimeout(()=> {
+              document.querySelector('.popup-wrap').addEventListener('click', function () {
+                console.log('关闭弹出')
+                document.querySelector('.popup-wrap').style.display ="none"
+                ReactDOM.unmountComponentAtNode(popupCont);
+                document.body.removeChild(popupCont);
+              })
+              document.querySelector('.camera').addEventListener('click', function (e) {
+                e.stopPropagation()
+                console.log('触发拍摄按钮')
+              })
+              document.querySelector('.album').addEventListener('click', function (e) {
+                e.stopPropagation()
+                console.log('触发拍摄按钮')
+              })
+             }, 2000)
+            })
         });
-      })
   },2000)
       
   </script>
