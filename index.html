@@ -52,7 +52,7 @@
     }
 
     .popup-cont {
-      position: absolute;
+      position: fixed;
       bottom: 0;
       width: 100vw;
       height: auto;
@@ -61,10 +61,11 @@
     }
 
     .popup-wrap {
-      position: fixed;
-      bottom:0;
+      position: absolute;
       height: 100vh;
       width: 100vw;
+      top:0 ;
+      left: 0;
       /* pointer-events: none; */
       background-color: rgba(101, 109, 250, 0.2);
       transform: translateZ(0);
@@ -79,8 +80,8 @@
       background-color: #ccc;
     }
     .am-modal-popup {
-      z-index:999;
-      transform: translateZ(0);
+      z-index:99;
+      transform: translateZ(-1);
     }
   </style>
 </head>
