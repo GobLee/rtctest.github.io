@@ -96,7 +96,7 @@
       console.log(document.getElementById('modal'))
       // 初始化
       var vConsole = new VConsole();
-      if (navigator.mediaDevices.getUserMedia || navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia) {
+      if (navigator.mediaDevices.getUserMedia) {
 
         const success = function (){
       navigator.mediaDevices.enumerateDevices().then(res => {
