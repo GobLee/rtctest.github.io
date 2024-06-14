@@ -173,7 +173,7 @@
                 if(!list.length){
                   return
                 }
-                tryCamera(list[list.length -1]).catch(() => {
+                tryCamera(list[list.length -1].deviceId).catch(() => {
                 list.pop()
                 fun()
               })
