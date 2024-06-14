@@ -202,7 +202,8 @@
           
           setTimeout(()=>{
             imgUrl2 = canvasDom.toDataURL()
-                      // 将裁剪后的图片转换为文件流
+            console.log(imgUrl2)
+            // 将裁剪后的图片转换为文件流
           canvasDom.toBlob(function(blob) {
           	context = null
           	resolve(blob)
