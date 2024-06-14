@@ -33,7 +33,6 @@
     }
 
     canvas {
-      display: none;
       width: 100%;
       height: auto;
     }
@@ -90,7 +89,7 @@
 </head>
 
 <body>
-  <h3>1.5</h3>
+  <h3>1.6</h3>
   <div id="devices"></div>
   <video id="video" crossorigin="anonymous" playsInline x5-playsinline="true" webkit-playsinline="true" muted autoplay>视频流目前不可用。</video>
   <div>
@@ -197,9 +196,9 @@
           canvasDom.height = outputHeight;
           console.log(canvasDom.width,canvasDom.height)
           console.log('orign',originWidth, nodeParam.videoHeight);
-          
-          console.log(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight)
-          context.drawImage(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
+          context.drawImage(nodeParam, 0, 0, nodeParam.videoWidth, nodeParam.videoHeight)
+          //console.log(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight)
+         // context.drawImage(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
           
           setTimeout(()=>{
             imgUrl2 = canvasDom.toDataURL()
