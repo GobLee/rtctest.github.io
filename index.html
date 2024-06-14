@@ -193,7 +193,7 @@
           // 裁剪后的高度，身份证宽高比1.58，上下识别区域多30%
           const outputHeight = originWidth / (1.58 * 0.7)
           canvasDom.width = originWidth;
-          canvasDom.height = outputHeight;
+          canvasDom.height = nodeParam.videoHeight;
           console.log(canvasDom.width,canvasDom.height)
           console.log('orign',originWidth, nodeParam.videoHeight);
           context.drawImage(nodeParam, 0, 0, nodeParam.videoWidth, nodeParam.videoHeight)
