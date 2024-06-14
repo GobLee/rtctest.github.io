@@ -122,14 +122,17 @@
             }
           })
           console.log('deviceList', deviceList)
-          return deviceList
+          return deviceList || []
         }).then(res => {
+          if(!res.length){
+            return
+          }
         // const devices = document.querySelector('#devices')
         // res.forEach((device, index) => {
           // const btn = document.createElement('button')
           // btn.innerHTML = device.label || `摄像头${index + 1}`
           // btn.addEventListener('click', function () {
-            let lastDevice = deviceList[deviceList.length -1]
+            let lastDevice = res[res.length -1]
             const target = document.querySelector('video')
             target.srcObject && (target.srcObject = null)
             target.src && (target.src = null)
