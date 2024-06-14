@@ -89,7 +89,7 @@
 </head>
 
 <body>
-  <h3>1.7</h3>
+  <h3>1.8</h3>
   <div id="devices"></div>
   <video id="video" crossorigin="anonymous" playsInline x5-playsinline="true" webkit-playsinline="true" muted autoplay>视频流目前不可用。</video>
   <div>
@@ -124,19 +124,19 @@
           console.log('deviceList', deviceList)
           return deviceList
         }).then(res => {
-        const devices = document.querySelector('#devices')
-        res.forEach((device, index) => {
-          const btn = document.createElement('button')
-          btn.innerHTML = device.label || `摄像头${index + 1}`
-          btn.addEventListener('click', function () {
-
+        // const devices = document.querySelector('#devices')
+        // res.forEach((device, index) => {
+          // const btn = document.createElement('button')
+          // btn.innerHTML = device.label || `摄像头${index + 1}`
+          // btn.addEventListener('click', function () {
+            let lastDevice = deviceList[deviceList.length -1]
             const target = document.querySelector('video')
             target.srcObject && (target.srcObject = null)
             target.src && (target.src = null)
             navigator.mediaDevices.getUserMedia({
               audio: false,
               video: {
-                deviceId: { exact: device.deviceId },
+                deviceId: { exact: lastDevice.deviceId },
                 width: { min: 1024, ideal: 1280, max: 1920 },
                 height: { min: 776, ideal: 720, max: 1080 },
                 facingMode: 'environment', // 后置摄像头
@@ -161,11 +161,11 @@
             }).catch(() => {
               console.log('调用摄像头失败')
             })
-          })
-          devices.appendChild(btn)
+          // })
+          // devices.appendChild(btn)
 
         })
-      })
+      // })
     }
         //调用用户媒体设备, 访问摄像头
         navigator.mediaDevices.getUserMedia({video: {width: 480, height: 320}}).then(()=>{
