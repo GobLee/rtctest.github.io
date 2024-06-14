@@ -143,8 +143,8 @@
                     console.log('请将身份证人像对准扫描框')
                   }
 
-                }).catch(() => {
-                  console.log('调用摄像头失败')
+                }).catch((e) => {
+                  console.log('调用摄像头失败',e)
                   reject()
                 })
               } catch (error) {
