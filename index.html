@@ -89,6 +89,7 @@
 </head>
 
 <body>
+  <h3>1.1</h3>
   <div id="devices"></div>
   <video id="video" playsInline x5-playsinline="true" webkit-playsinline="true" muted autoplay>视频流目前不可用。</video>
   <div>
@@ -199,12 +200,12 @@
           console.log(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight)
           context.drawImage(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
           let imageData = context.getImageData(0,0,originWidth,outputHeight)
-          console.log('base',imageData);
+          console.log('base',imageData.data);
           
           // setTimeout(()=>{
           //   imgUrl2 = canvasDom.toDataURL("image/png", 0.8)
           //   console.log('imgUrl2',imgUrl2);
-            document.querySelector('#img').src = imageData
+            document.querySelector('#img').src = imageData.data
           // },2000)
         } catch (error) {
            console.log('e',error);
