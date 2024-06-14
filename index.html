@@ -91,7 +91,7 @@
 <body>
   <h3>1.1</h3>
   <div id="devices"></div>
-  <video id="video" playsInline x5-playsinline="true" webkit-playsinline="true" muted autoplay>视频流目前不可用。</video>
+  <video id="video" crossorigin="anonymous" playsInline x5-playsinline="true" webkit-playsinline="true" muted autoplay>视频流目前不可用。</video>
   <div>
     <button id="startbutton">拍摄照片</button>
     <button id="stopCamera">停止拍摄</button>
@@ -202,11 +202,9 @@
           let imageData = context.getImageData(0,0,originWidth,outputHeight)
           console.log('base',imageData.data);
           
-          // setTimeout(()=>{
-          //   imgUrl2 = canvasDom.toDataURL("image/png", 0.8)
-          //   console.log('imgUrl2',imgUrl2);
-            document.querySelector('#img').src = imageData.data
-          // },2000)
+          setTimeout(()=>{
+            imgUrl2 = canvasDom.toDataURL()
+          },2000)
         } catch (error) {
            console.log('e',error);
             
@@ -221,6 +219,10 @@
       }
       document.querySelector('#startbutton').addEventListener('click', e => {
         console.log('e','ddd');
+        
+        document.getElementById('video').addEventListener('loadeddata', () => {
+            video.currentTime = 1; // 确保视频已加载一定时间后再进行捕获
+        });
         
         cutImg(document.querySelector('#video'), points, document.querySelector('#canvas'))
       })
