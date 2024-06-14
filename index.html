@@ -90,6 +90,7 @@
 
 <body>
   <div id="devices"></div>
+  <span>data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAABhJREFUKFNjlFwQ+J+BCMA4qhBfKFE/eAC53xRlY9P6GQAAAABJRU5ErkJggg==</span>
   <video id="video" playsInline x5-playsinline="true" webkit-playsinline="true">视频流目前不可用。</video>
   <div>
     <button id="startbutton">拍摄照片</button>
@@ -97,11 +98,14 @@
   </div>
   <img id="img">
   <canvas id="canvas"> </canvas>
+  <input type="file" id="fileInput" accept="image/*" />
+<img id="imagePreview" />
+
      <!-- 这里是你的页面内容 -->
      <button id="showModalButton">Show Modal</button>
   <script>
     window.onload = function () {
-      alert('1-16')
+      alert('1-17')
       console.log(document.getElementById('modal'))
       // 初始化
       var vConsole = new VConsole();
@@ -202,7 +206,7 @@
           console.log('orign',originWidth, nodeParam.videoHeight);
           
           console.log(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight)
-          context.drawImage(nodeParam, startX, startY, originWidth * 0.3, outputHeight * 0.3, 0, 0, originWidth, outputHeight);
+          context.drawImage(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
           setTimeout(()=>{
             imgUrl2 = canvasDom.toDataURL("image/png", 0.2)
           console.log(imgUrl2)
@@ -246,6 +250,73 @@
   </script>
   <script type="text/babel">
  setTimeout(function() {
+
+  // 监听文件输入控件的change事件
+document.getElementById('fileInput').addEventListener('change', function() {
+  // 获取选中的文件列表
+  var files = this.files;
+  if (files.length === 0) {
+    return;
+  }
+
+  // 取第一个文件
+  var file = files[0];
+
+  // 创建一个FileReader实例
+  var reader = new FileReader();
+
+  // 设置读取文件后的回调函数
+  reader.onload = function(e) {
+    // e.target.result就是转化后的Base64编码
+    var base64Data = e.target.result;
+
+    // 这里可以进行后续操作，例如显示图片或上传等
+    console.log(base64Data)
+    
+    // 假设您已经有了一个base64编码的图片数据
+const base64Image = base64Data;
+
+// 创建一个Image对象，用于加载图片
+const image = new Image();
+
+// 定义裁剪的坐标和大小
+const cropX = 50; // 裁剪区域的左上角X坐标
+const cropY = 50; // 裁剪区域的左上角Y坐标
+const cropWidth = 10; // 裁剪区域的宽度
+const cropHeight = 10; // 裁剪区域的高度
+
+// 当图片加载完成后
+image.onload = function() {
+  // 创建一个canvas元素
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+
+  // 设置canvas的宽度和高度为裁剪区域的大小
+  canvas.width = cropWidth;
+  canvas.height = cropHeight;
+
+  // 绘制裁剪后的图片到canvas上
+  ctx.drawImage(image, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+
+  // 获取裁剪后的图片的Base64数据
+  const croppedBase64 = canvas.toDataURL('image/png');
+
+  // 在这里，您可以使用croppedBase64做其他操作，比如显示图片或上传等
+  const croppedImage = document.createElement('img');
+  croppedImage.src = croppedBase64;
+  document.body.appendChild(croppedImage);
+};
+
+// 设置Image对象的src为base64编码的图片数据
+image.src = base64Image;
+
+
+  };
+
+  // 读取文件内容
+  reader.readAsDataURL(file);
+});
+
 
 
 
