@@ -202,17 +202,18 @@
           
           setTimeout(()=>{
             imgUrl2 = canvasDom.toDataURL()
+                      // 将裁剪后的图片转换为文件流
+          canvasDom.toBlob(function(blob) {
+          	context = null
+          	resolve(blob)
+          });
           },2000)
         } catch (error) {
            console.log('e',error);
             
           }
 
-          // 将裁剪后的图片转换为文件流
-          // canvasDom.toBlob(function(blob) {
-          // 	context = null
-          // 	resolve(blob)
-          // });
+
         })
       }
       document.querySelector('#startbutton').addEventListener('click', e => {
