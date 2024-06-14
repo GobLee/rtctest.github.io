@@ -109,20 +109,20 @@
       var vConsole = new VConsole();
       if (navigator.mediaDevices.getUserMedia) {
         const success = function (){
-      navigator.mediaDevices.enumerateDevices().then(res => {
-        const deviceList = []
-        res.map(item => {
-          console.log('device', JSON.stringify(item))
-          if (item.deviceId) {
-            deviceList.push({
-              deviceId: item.deviceId,
-              label: item.label
-            })
-          }
-        })
-        console.log('deviceList', deviceList)
-        return deviceList
-      }).then(res => {
+        navigator.mediaDevices.enumerateDevices().then(res => {
+          const deviceList = []
+          res.map(item => {
+            console.log('device', JSON.stringify(item))
+            if (item.deviceId) {
+              deviceList.push({
+                deviceId: item.deviceId,
+                label: item.label
+              })
+            }
+          })
+          console.log('deviceList', deviceList)
+          return deviceList
+        }).then(res => {
         const devices = document.querySelector('#devices')
         res.forEach((device, index) => {
           const btn = document.createElement('button')
