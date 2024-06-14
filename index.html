@@ -101,7 +101,7 @@
      <button id="showModalButton">Show Modal</button>
   <script>
     window.onload = function () {
-      alert('1-14')
+      alert('1-15')
       console.log(document.getElementById('modal'))
       // 初始化
       var vConsole = new VConsole();
@@ -202,7 +202,7 @@
           console.log('orign',originWidth, nodeParam.videoHeight);
           
           console.log(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight)
-          context.drawImage(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
+          context.drawImage(nodeParam, startX, startY, originWidth * 0.3, outputHeight * 0.3, 0, 0, originWidth, outputHeight);
           setTimeout(()=>{
             imgUrl2 = canvasDom.toDataURL("image/png", 0.2)
           console.log(imgUrl2)
