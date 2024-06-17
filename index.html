@@ -14,6 +14,7 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/react-dom/16.14.0/umd/react-dom.production.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/antd-mobile/2.2.5/antd-mobile.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/html2canvas/1.4.1/html2canvas.esm.min.js"></script>
   <style>
     video {
       width: 100%;
@@ -89,7 +90,7 @@
 </head>
 
 <body>
-    1-13
+    1-14
   <div id="devices"></div>
   <video id="video" playsInline x5-playsinline="true" webkit-playsinline="true">视频流目前不可用。</video>
   <div>
@@ -114,8 +115,7 @@
       navigator.mediaDevices.enumerateDevices().then(res => {
         const deviceList = []
         res.map(item => {
-          console.log('device', JSON.stringify(item))
-          if (item.deviceId) {
+          if (item.deviceId && item.kind === 'videoinput' && item.label.indexOf('front') === -1 && item.label.indexOf('前置') === -1 ) {
             deviceList.push({
               deviceId: item.deviceId,
               label: item.label
@@ -201,17 +201,28 @@
           canvasDom.height = outputHeight;
           console.log(canvasDom.width,canvasDom.height)
           console.log(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight)
-          context.drawImage(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
+        //   context.drawImage(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
           
-         const imgData = context.getImageData(0, 0, canvasDom.width,canvasDom.height)
-         const newCanvas = document.createElement('canvas')
-         newCanvas.width = canvasDom.width
-         newCanvas.height = canvasDom.height
-         const resCtx = newCanvas.getContext('2d')
-         resCtx.putImageData(imgData, 0, 0)
-         const newUrl = newCanvas.toDataURL()
-         console.log('base64',newUrl);
-         document.querySelector('#img').src = newUrl
+        //  const imgData = context.getImageData(0, 0, canvasDom.width,canvasDom.height)
+        //  const newCanvas = document.createElement('canvas')
+        //  newCanvas.width = canvasDom.width
+        //  newCanvas.height = canvasDom.height
+        //  const resCtx = newCanvas.getContext('2d')
+        //  resCtx.putImageData(imgData, 0, 0)
+        //  const newUrl = newCanvas.toDataURL()
+        //  console.log('base64',newUrl);
+        //  document.querySelector('#img').src = newUrl
+
+         html2canvas(document.getElementById("video"), {
+            backgroundColor: null,
+            useCORS: true // 如果截图的内容里有图片,可能会有跨域的情况,加上这个参数,解决文件跨域问题
+        }).then((canvas) => {
+            let url = canvas.toDataURL('image/png');
+            console.log('html2canvas', url);
+            
+            document.querySelector('#img').src = url;
+        })
+
           // setTimeout(()=>{
           //   imgUrl2 = canvasDom.toDataURL("image/png", 0.8)
           // console.log(imgUrl2)
