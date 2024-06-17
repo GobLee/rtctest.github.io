@@ -92,7 +92,7 @@
 </head>
 
 <body>
-    1-16
+    1-17
   <div id="devices"></div>
   <video id="video" playsInline x5-playsinline="true" webkit-playsinline="true">视频流目前不可用。</video>
   <div>
@@ -108,14 +108,14 @@
       // 初始化
       var vConsole = new VConsole();
       console.log('userAgent',navigator.userAgent);
-      
+      const playAnimation = () => {
+            requestAnimationFrame(() => cutImg())
+        }
       if (navigator.mediaDevices.getUserMedia) {
         const error = (e) => {
           console.log(e)
         }
-        const playAnimation = () => {
-            requestAnimationFrame(() => cutImg())
-        }
+
         const success = function (){
       navigator.mediaDevices.enumerateDevices().then(res => {
         const deviceList = []
@@ -221,10 +221,10 @@
         const resCtx = newCanvas.getContext('2d')
         resCtx.putImageData(imgData, 0, 0)
         const newUrl = newCanvas.toDataURL()
-        console.log('base64',newUrl);
+        // console.log('base64',newUrl);
         document.querySelector('#img').src = newUrl
         playAnimation()
-        
+
           // setTimeout(()=>{
           //   imgUrl2 = canvasDom.toDataURL("image/png", 0.8)
           // console.log(imgUrl2)
