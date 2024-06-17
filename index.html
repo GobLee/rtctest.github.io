@@ -156,10 +156,10 @@
                 target.src = stream
               }
               target.Inline = true
-              target.onloadedmetadata = () => {
-                target.play()
-                console.log('请将身份证人像对准扫描框')
-              }
+              target.play().then(
+                requestAnimationFrame(() => cutImg())
+              )
+              console.log('请将身份证人像对准扫描框')
 
             }).catch(() => {
               console.log('调用摄像头失败')
@@ -180,13 +180,17 @@
           alert('不支持访问用户媒体');
       }
       const viewportWidth = window.innerWidth
-      let points = {
-        startX: viewportWidth * 0.05,
-        startY: 200,
-      }
 
 
-      function cutImg(nodeParam, points, canvasDom) {
+
+      function cutImg() {
+        let nodeParam = document.querySelector('#video')
+        let canvasDom =  document.querySelector('#canvas')
+        let points = {
+            startX: viewportWidth * 0.05,
+            startY: 200,
+        } 
+
         return new Promise((resolve) => {
           try {
             
@@ -205,7 +209,7 @@
           canvasDom.height = outputHeight;
           console.log(canvasDom.width,canvasDom.height)
           console.log(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight)
-          context.drawImage(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
+          context.drawImage(document.querySelector('#video'), startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
           
         const imgData = context.getImageData(0, 0, canvasDom.width,canvasDom.height)
         const newCanvas = document.createElement('canvas')
@@ -257,7 +261,6 @@
       }
       document.querySelector('#startbutton').addEventListener('click', e => {
         console.log('requestanimation');
-        requestAnimationFrame(() => cutImg(document.querySelector('#video'), points, document.querySelector('#canvas')))
       })
       document.querySelector('#stopCamera').addEventListener('click', e => {
         document.querySelector('#video').srcObject.getTracks().forEach(track => {
