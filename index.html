@@ -1,6 +1,5 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
-
 
 <head>
   <meta charset="UTF-8">
@@ -10,11 +9,11 @@
   <script src="https://cdn.bootcss.com/vConsole/3.3.4/vconsole.min.js"></script>
   <!-- 引入 antd-mobile 样式表 -->
   <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/antd-mobile/2.2.5/antd-mobile.min.css">
-  <!-- 引入 React、ReactDOM 和 antd-mobile 的 JS 文件 -->
-  <script src="https://cdn.bootcdn.net/ajax/libs/react/16.14.0/umd/react.production.min.js"></script>
-  <script src="https://cdn.bootcdn.net/ajax/libs/react-dom/16.14.0/umd/react-dom.production.min.js"></script>
-  <script src="https://cdn.bootcdn.net/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
-  <script src="https://cdn.bootcdn.net/ajax/libs/antd-mobile/2.2.5/antd-mobile.js"></script>
+    <!-- 引入 React、ReactDOM 和 antd-mobile 的 JS 文件 -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/react/16.14.0/umd/react.production.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/react-dom/16.14.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/antd-mobile/2.2.5/antd-mobile.js"></script>
   <style>
     video {
       width: 100%;
@@ -33,6 +32,7 @@
     }
 
     canvas {
+      display: none;
       width: 100%;
       height: auto;
     }
@@ -44,10 +44,10 @@
     .popup-content {
       width: 100%;
       height: 400px;
-      -webkit-transform: translateZ(1px);
-      -moz-transform: translateZ(1px);
-      -o-transform: translateZ(1px);
-      transform: translateZ(1px);
+      -webkit-transform:translateZ(1px);
+      -moz-transform:translateZ(1px);
+      -o-transform:translateZ(1px);
+      transform:translateZ(1px);
     }
 
 
@@ -57,29 +57,28 @@
       width: 100vw;
       height: auto;
       z-index: 9999;
-      -webkit-transform: translateZ(1px);
-      -moz-transform: translateZ(1px);
-      -o-transform: translateZ(1px);
-      transform: translateZ(1px);
+      -webkit-transform:translateZ(1px);
+      -moz-transform:translateZ(1px);
+      -o-transform:translateZ(1px);
+      transform:translateZ(1px);
     }
 
     .popup-wrap {
       position: fixed;
       height: 100vh;
       width: 100vw;
-      top: 0;
+      top:0 ;
       left: 0;
       /* pointer-events: none; */
       background-color: rgba(101, 109, 250, 0.2);
-      -webkit-transform: translateZ(1px);
-      -moz-transform: translateZ(1px);
-      -o-transform: translateZ(1px);
-      transform: translateZ(1px);
+      -webkit-transform:translateZ(1px);
+      -moz-transform:translateZ(1px);
+      -o-transform:translateZ(1px);
+      transform:translateZ(1px);
       z-index: 9999;
     }
 
-    .camera,
-    .album {
+    .camera, .album {
       width: 100%;
       height: 100px;
       line-height: 100px;
@@ -90,61 +89,91 @@
 </head>
 
 <body>
-  <h3>1.10</h3>
   <div id="devices"></div>
-  <video id="video" crossorigin="anonymous" playsInline x5-playsinline="true" webkit-playsinline="true" muted
-    autoplay>视频流目前不可用。</video>
+  <video id="video" playsInline x5-playsinline="true" webkit-playsinline="true">视频流目前不可用。</video>
   <div>
     <button id="startbutton">拍摄照片</button>
     <button id="stopCamera">停止拍摄</button>
   </div>
   <img id="img">
   <canvas id="canvas"> </canvas>
+     <!-- 这里是你的页面内容 -->
+     <button id="showModalButton">Show Modal</button>
   <script>
     window.onload = function () {
+      alert('1-12')
+      console.log(document.getElementById('modal'))
       // 初始化
       var vConsole = new VConsole();
       if (navigator.mediaDevices.getUserMedia) {
-        const target = document.querySelector('#video')
-        console.log('video',target);
-        const config = {
-            audio: false,
-            video: {
-                width: { min: 1024, ideal: 1280, max: 1920 },
-				height: { min: 776, ideal: 720, max: 1080 },
-                facingMode: 'environment', // 后置摄像头
-            }
+        const error = (e) => {
+          console.log(e)
         }
-        //调用用户媒体设备, 访问摄像头
-        navigator.mediaDevices.getUserMedia(config).then(()=>{
-        // 获取权限后再调取
-        //调用用户媒体设备, 访问摄像头
-        try {
-        navigator.mediaDevices.getUserMedia(config).then(stream => {
-        if (target.srcObject !== undefined) {
-            target.srcObject = stream
-        } else if (window.URL.createObjectURL) {
-            target.src = window.URL.createObjectURL(stream)
-        } else if (window.webkitURL) {
-            target.src = window.webkitURL.createObjectURL(stream)
-        } else {
-            target.src = stream
-        }
-        target.Inline = true
-        target.onloadedmetadata = () => {
-            target.play()
-            console.log('请将身份证人像对准扫描框')
-        }
-
-        }).catch((e) => {
-            console.log('调用摄像头失败',e)
+        const success = function (){
+          console.log('成功')
+      navigator.mediaDevices.enumerateDevices().then(res => {
+        const deviceList = []
+        res.map(item => {
+          console.log('device', JSON.stringify(item))
+          if (item.deviceId) {
+            deviceList.push({
+              deviceId: item.deviceId,
+              label: item.label
+            })
+          }
         })
-        } catch (error) {
-            console.log('error',error);
-        }
-    });
-      } else {
-        alert('不支持访问用户媒体');
+        console.log('deviceList', deviceList)
+        return deviceList
+      }).then(res => {
+        const devices = document.querySelector('#devices')
+        res.forEach((device, index) => {
+          const btn = document.createElement('button')
+          btn.innerHTML = device.label || `摄像头${index + 1}`
+          btn.addEventListener('click', function () {
+
+            const target = document.querySelector('video')
+            target.srcObject && (target.srcObject = null)
+            target.src && (target.src = null)
+            navigator.mediaDevices.getUserMedia({
+              audio: false,
+              video: {
+                deviceId: { exact: device.deviceId },
+                width: { min: 1024, ideal: 1280, max: 1920 },
+                height: { min: 776, ideal: 720, max: 1080 },
+                facingMode: 'environment', // 后置摄像头
+              }
+            }).then(stream => {
+
+              if (target.srcObject !== undefined) {
+                target.srcObject = stream
+              } else if (window.URL.createObjectURL) {
+                target.src = window.URL.createObjectURL(stream)
+              } else if (window.webkitURL) {
+                target.src = window.webkitURL.createObjectURL(stream)
+              } else {
+                target.src = stream
+              }
+              target.Inline = true
+              target.onloadedmetadata = () => {
+                target.play()
+                console.log('请将身份证人像对准扫描框')
+              }
+
+            }).catch(() => {
+              console.log('调用摄像头失败')
+            })
+          })
+          devices.appendChild(btn)
+
+        })
+      })
+    }
+        //调用用户媒体设备, 访问摄像头
+        navigator.mediaDevices.getUserMedia({video: {width: 480, height: 320}}).then(()=>{
+          success()
+        });
+    } else {
+          alert('不支持访问用户媒体');
       }
       const viewportWidth = window.innerWidth
       let points = {
@@ -155,40 +184,54 @@
       function cutImg(nodeParam, points, canvasDom) {
         return new Promise((resolve) => {
           try {
-            // 获取 图片/视频高度和宽度，需要和视口比例做匹配，canvas绘制时根据 图片/视频 的原高和宽进行裁剪
-            const originWidth = nodeParam.naturalWidth || nodeParam.videoWidth;
-            const { startX = 0, startY = 0 } = points || {};
+            
+  
+          // 获取 图片/视频高度和宽度，需要和视口比例做匹配，canvas绘制时根据 图片/视频 的原高和宽进行裁剪
+          const originWidth = nodeParam.naturalWidth || nodeParam.videoWidth;
 
-            let context = canvasDom.getContext('2d');
-            // 裁剪后的高度，身份证宽高比1.58，上下识别区域多30%
-            const outputHeight = originWidth / (1.58 * 0.7)
-            canvasDom.width = originWidth;
-            canvasDom.height = nodeParam.videoHeight;
-            context.drawImage(nodeParam, 0, 0, nodeParam.videoWidth, nodeParam.videoHeight)
-            //console.log(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight)
-            // context.drawImage(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
 
-            setTimeout(() => {
-              imgUrl2 = canvasDom.toDataURL()
-              document.querySelector('#img').src = imgUrl2
-              console.log(imgUrl2)
-              // 将裁剪后的图片转换为文件流
-              canvasDom.toBlob(function (blob) {
-                context = null
-                resolve(blob)
-              });
-            }, 2000)
-          } catch (error) {
-            console.log('e', error);
 
+          const { startX = 0, startY = 0} = points || {};
+
+          let context = canvasDom.getContext('2d');
+          // 裁剪后的高度，身份证宽高比1.58，上下识别区域多30%
+          const outputHeight = originWidth / (1.58 * 0.7)
+          canvasDom.width = originWidth;
+          canvasDom.height = outputHeight;
+          console.log(canvasDom.width,canvasDom.height)
+          console.log(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight)
+          context.drawImage(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
+          // setTimeout(()=>{
+          //   imgUrl2 = canvasDom.toDataURL("image/png", 0.8)
+          // console.log(imgUrl2)
+          // document.querySelector('#img').src = imgUrl2
+          // },2000)
+          canvas.toBlob(function(blob) {
+          var reader = new FileReader();
+          reader.onload = function() {
+              var base64data = reader.result;
+              console.log('base64',base64data);
+              
+              document.querySelector('#img').src = base64data
+              // 使用base64data进行展示操作
+          };
+          reader.readAsDataURL(blob);
+        }, 'image/png');
+        } catch (error) {
+           console.log('e',error);
+            
           }
 
-
+          // 将裁剪后的图片转换为文件流
+          // canvasDom.toBlob(function(blob) {
+          // 	context = null
+          // 	resolve(blob)
+          // });
         })
       }
       document.querySelector('#startbutton').addEventListener('click', e => {
-        console.log('e', 'ddd');
-
+        console.log('e','ddd');
+        
         cutImg(document.querySelector('#video'), points, document.querySelector('#canvas'))
       })
       document.querySelector('#stopCamera').addEventListener('click', e => {
@@ -198,6 +241,76 @@
         document.querySelector('#video').srcObject = null
       })
     }
+  </script>
+  <script type="text/babel">
+ setTimeout(function() {
+
+
+
+
+        document.getElementById('showModalButton').addEventListener('click', function () {
+          const modalContainer = document.createElement('div');
+        document.body.appendChild(modalContainer);
+          function onClose() {
+            ReactDOM.unmountComponentAtNode(modalContainer);
+            document.body.removeChild(modalContainer);
+        }
+            const Modal = window['antd-mobile'].Modal;
+
+            const modal = (
+                <Modal
+                  popup
+                  visible
+                  transparent
+                  maskClosable
+                  animationType="slide-up"
+                  onClose={onClose}
+                  title="Modal"
+                >
+                    <div class='popup-content'>
+                      <button id="popup">弹出层</button>
+                    </div>
+                </Modal>
+            );
+
+            
+
+            ReactDOM.render(modal, modalContainer);
+            document.getElementById('popup').addEventListener('click', function () {
+              const popupCont = document.createElement('div');
+              popupCont.innerText = '自定义层级9999'
+              popupCont.classList.add('popup-wrap')
+              document.body.appendChild(popupCont);
+
+              const popup = (
+                  <div class="popup-cont">
+                    <div class="camera">拍摄</div>
+                    <div class="album">相册</div>
+                  </div>
+              )
+
+
+              ReactDOM.render(popup, popupCont);
+             setTimeout(()=> {
+              document.querySelector('.popup-wrap').addEventListener('click', function () {
+                console.log('关闭弹出')
+                document.querySelector('.popup-wrap').style.display ="none"
+                ReactDOM.unmountComponentAtNode(popupCont);
+                document.body.removeChild(popupCont);
+              })
+              document.querySelector('.camera').addEventListener('click', function (e) {
+                e.stopPropagation()
+                console.log('触发拍摄按钮')
+              })
+              document.querySelector('.album').addEventListener('click', function (e) {
+                e.stopPropagation()
+                console.log('触发拍摄按钮')
+              })
+             }, 2000)
+            })
+        });
+  },2000)
+      
   </script>
 </body>
 
