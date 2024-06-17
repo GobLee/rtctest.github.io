@@ -14,7 +14,7 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/react-dom/16.14.0/umd/react-dom.production.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/antd-mobile/2.2.5/antd-mobile.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/html2canvas/1.4.1/html2canvas.esm.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.3.2/dist/html2canvas.min.js"></script>
   <style>
     video {
       width: 100%;
@@ -213,7 +213,7 @@
         //  console.log('base64',newUrl);
         //  document.querySelector('#img').src = newUrl
 
-         html2canvas(document.getElementById("video"), {
+        html2canvas(document.getElementById("video"), {
             backgroundColor: null,
             useCORS: true // 如果截图的内容里有图片,可能会有跨域的情况,加上这个参数,解决文件跨域问题
         }).then((canvas) => {
