@@ -15,6 +15,8 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/antd-mobile/2.2.5/antd-mobile.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.3.2/dist/html2canvas.min.js"></script>
+    <script src="./html2canvas.js"></script>
+
   <style>
     video {
       width: 100%;
@@ -138,8 +140,8 @@
               audio: false,
               video: {
                 deviceId: { exact: device.deviceId },
-                width: { min: 1024, ideal: 1280, max: 1920 },
-                height: { min: 776, ideal: 720, max: 1080 },
+                width: {ideal: 1280},
+                height: {ideal: 720},
                 facingMode: 'environment', // 后置摄像头
               }
             }).then(stream => {
@@ -168,6 +170,8 @@
         })
       })
     }
+
+
         //调用用户媒体设备, 访问摄像头
         navigator.mediaDevices.getUserMedia({video: {width: 480, height: 320}}).then(()=>{
           success()
@@ -203,15 +207,15 @@
           console.log(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight)
           context.drawImage(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
           
-         const imgData = context.getImageData(0, 0, canvasDom.width,canvasDom.height)
-         const newCanvas = document.createElement('canvas')
-         newCanvas.width = canvasDom.width
-         newCanvas.height = canvasDom.height
-         const resCtx = newCanvas.getContext('2d')
-         resCtx.putImageData(imgData, 0, 0)
-         const newUrl = newCanvas.toDataURL()
-         console.log('base64',newUrl);
-         document.querySelector('#img').src = newUrl
+        const imgData = context.getImageData(0, 0, canvasDom.width,canvasDom.height)
+        const newCanvas = document.createElement('canvas')
+        newCanvas.width = canvasDom.width
+        newCanvas.height = canvasDom.height
+        const resCtx = newCanvas.getContext('2d')
+        resCtx.putImageData(imgData, 0, 0)
+        const newUrl = newCanvas.toDataURL()
+        console.log('base64',newUrl);
+        document.querySelector('#img').src = newUrl
 
         // html2canvas(document.getElementById("video"), {
         //     backgroundColor: null,
@@ -252,9 +256,8 @@
         })
       }
       document.querySelector('#startbutton').addEventListener('click', e => {
-        console.log('e','ddd');
-        
-        cutImg(document.querySelector('#video'), points, document.querySelector('#canvas'))
+        console.log('requestanimation');
+        requestAnimationFrame(() => cutImg(document.querySelector('#video'), points, document.querySelector('#canvas')))
       })
       document.querySelector('#stopCamera').addEventListener('click', e => {
         document.querySelector('#video').srcObject.getTracks().forEach(track => {
