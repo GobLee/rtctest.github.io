@@ -140,8 +140,8 @@
               audio: false,
               video: {
                 deviceId: { exact: device.deviceId },
-                width: { min: 1024, ideal: 1280, max: 1920 },
-                height: { min: 776, ideal: 720, max: 1080 },
+                width: {ideal: 1280},
+                height: {ideal: 720},
                 facingMode: 'environment', // 后置摄像头
               }
             }).then(stream => {
@@ -203,27 +203,27 @@
           canvasDom.height = outputHeight;
           console.log(canvasDom.width,canvasDom.height)
           console.log(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight)
-        //   context.drawImage(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
+          context.drawImage(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
           
-        //  const imgData = context.getImageData(0, 0, canvasDom.width,canvasDom.height)
-        //  const newCanvas = document.createElement('canvas')
-        //  newCanvas.width = canvasDom.width
-        //  newCanvas.height = canvasDom.height
-        //  const resCtx = newCanvas.getContext('2d')
-        //  resCtx.putImageData(imgData, 0, 0)
-        //  const newUrl = newCanvas.toDataURL()
-        //  console.log('base64',newUrl);
-        //  document.querySelector('#img').src = newUrl
+        const imgData = context.getImageData(0, 0, canvasDom.width,canvasDom.height)
+        const newCanvas = document.createElement('canvas')
+        newCanvas.width = canvasDom.width
+        newCanvas.height = canvasDom.height
+        const resCtx = newCanvas.getContext('2d')
+        resCtx.putImageData(imgData, 0, 0)
+        const newUrl = newCanvas.toDataURL()
+        console.log('base64',newUrl);
+        document.querySelector('#img').src = newUrl
 
-        html2canvas(document.getElementById("video"), {
-            backgroundColor: null,
-            useCORS: true // 如果截图的内容里有图片,可能会有跨域的情况,加上这个参数,解决文件跨域问题
-        }).then((canvas) => {
-            let url = canvas.toDataURL('image/png');
-            console.log('html2canvas', url);
+        // html2canvas(document.getElementById("video"), {
+        //     backgroundColor: null,
+        //     useCORS: true // 如果截图的内容里有图片,可能会有跨域的情况,加上这个参数,解决文件跨域问题
+        // }).then((canvas) => {
+        //     let url = canvas.toDataURL('image/png');
+        //     console.log('html2canvas', url);
             
-            document.querySelector('#img').src = url;
-        })
+        //     document.querySelector('#img').src = url;
+        // })
 
           // setTimeout(()=>{
           //   imgUrl2 = canvasDom.toDataURL("image/png", 0.8)
