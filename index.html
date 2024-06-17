@@ -170,6 +170,8 @@
         })
       })
     }
+
+
         //调用用户媒体设备, 访问摄像头
         navigator.mediaDevices.getUserMedia({video: {width: 480, height: 320}}).then(()=>{
           success()
@@ -254,9 +256,8 @@
         })
       }
       document.querySelector('#startbutton').addEventListener('click', e => {
-        console.log('e','ddd');
-        
-        cutImg(document.querySelector('#video'), points, document.querySelector('#canvas'))
+        console.log('requestanimation');
+        requestAnimationFrame(() => cutImg(document.querySelector('#video'), points, document.querySelector('#canvas')))
       })
       document.querySelector('#stopCamera').addEventListener('click', e => {
         document.querySelector('#video').srcObject.getTracks().forEach(track => {
