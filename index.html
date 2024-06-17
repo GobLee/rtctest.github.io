@@ -106,8 +106,12 @@
       var vConsole = new VConsole();
       if (navigator.mediaDevices.getUserMedia) {
         const target = document.querySelector('#video')
+        console.log(target);
+        
         //调用用户媒体设备, 访问摄像头
+        try {
         navigator.mediaDevices.getUserMedia({
+            audio: false,
             video: {
                 width: { ideal: 1280, },
                 height: { ideal: 720, },
@@ -131,8 +135,10 @@
 
         }).catch((e) => {
             console.log('调用摄像头失败',e)
-            reject()
         })
+        } catch (error) {
+            console.log('error',error);
+        }
       } else {
         alert('不支持访问用户媒体');
       }
