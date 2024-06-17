@@ -92,7 +92,7 @@
 </head>
 
 <body>
-    1-15
+    1-16
   <div id="devices"></div>
   <video id="video" playsInline x5-playsinline="true" webkit-playsinline="true">视频流目前不可用。</video>
   <div>
@@ -112,6 +112,9 @@
       if (navigator.mediaDevices.getUserMedia) {
         const error = (e) => {
           console.log(e)
+        }
+        const playAnimation = () => {
+            requestAnimationFrame(() => cutImg())
         }
         const success = function (){
       navigator.mediaDevices.enumerateDevices().then(res => {
@@ -157,7 +160,7 @@
               }
               target.Inline = true
               target.play().then(
-                requestAnimationFrame(() => cutImg())
+                playAnimation()
               )
               console.log('请将身份证人像对准扫描框')
 
@@ -220,17 +223,8 @@
         const newUrl = newCanvas.toDataURL()
         console.log('base64',newUrl);
         document.querySelector('#img').src = newUrl
-
-        // html2canvas(document.getElementById("video"), {
-        //     backgroundColor: null,
-        //     useCORS: true // 如果截图的内容里有图片,可能会有跨域的情况,加上这个参数,解决文件跨域问题
-        // }).then((canvas) => {
-        //     let url = canvas.toDataURL('image/png');
-        //     console.log('html2canvas', url);
-            
-        //     document.querySelector('#img').src = url;
-        // })
-
+        playAnimation()
+        
           // setTimeout(()=>{
           //   imgUrl2 = canvasDom.toDataURL("image/png", 0.8)
           // console.log(imgUrl2)
