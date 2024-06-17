@@ -89,6 +89,7 @@
 </head>
 
 <body>
+    1-13
   <div id="devices"></div>
   <video id="video" playsInline x5-playsinline="true" webkit-playsinline="true">视频流目前不可用。</video>
   <div>
@@ -101,16 +102,15 @@
      <button id="showModalButton">Show Modal</button>
   <script>
     window.onload = function () {
-      alert('1-12')
-      console.log(document.getElementById('modal'))
       // 初始化
       var vConsole = new VConsole();
+      console.log('userAgent',navigator.userAgent);
+      
       if (navigator.mediaDevices.getUserMedia) {
         const error = (e) => {
           console.log(e)
         }
         const success = function (){
-          console.log('成功')
       navigator.mediaDevices.enumerateDevices().then(res => {
         const deviceList = []
         res.map(item => {
