@@ -100,39 +100,82 @@
   </div>
   <img id="img">
   <canvas id="canvas"> </canvas>
+  <input type="file" id="fileInput" accept="image/*" />
+  <img id="imagePreview" />
+
+  <!-- 这里是你的页面内容 -->
+  <button id="showModalButton">Show Modal</button>
   <script>
     window.onload = function () {
       // 初始化
       var vConsole = new VConsole();
       if (navigator.mediaDevices.getUserMedia) {
+        const success = function () {
+          function tryCamera(deviceId) {
+            const target = document.querySelector('video')
+            //   target.srcObject && (target.srcObject = null)
+            //   target.src && (target.src = null)
+            return new Promise((resolve, reject) => {
+              navigator.mediaDevices.getUserMedia({
+                video: {
+                  deviceId: { exact: deviceId },
+                  width: { ideal: 1280, },
+                  height: { ideal: 720, },
+                  facingMode: 'environment', // 后置摄像头
+                }
+              }).then(stream => {
+                if (target.srcObject !== undefined) {
+                  target.srcObject = stream
+                } else if (window.URL.createObjectURL) {
+                  target.src = window.URL.createObjectURL(stream)
+                } else if (window.webkitURL) {
+                  target.src = window.webkitURL.createObjectURL(stream)
+                } else {
+                  target.src = stream
+                }
+                target.Inline = true
+                target.onloadedmetadata = () => {
+                  target.play()
+                  console.log('请将身份证人像对准扫描框')
+                }
 
-        //调用用户媒体设备, 访问摄像头
-        navigator.mediaDevices.getUserMedia({
-            video: {
-                width: { ideal: 1280, },
-                height: { ideal: 720, },
-                facingMode: 'environment', // 后置摄像头
+              }).catch((e) => {
+                console.log('调用摄像头失败',e)
+                reject()
+              })
+            })
+          }
+          navigator.mediaDevices.enumerateDevices().then(res => {
+            const deviceList = []
+            res.map(item => {
+              if (item.deviceId && item.kind === 'videoinput' && item.label.indexOf('front') === -1 ) {
+                deviceList.push({
+                  deviceId: item.deviceId,
+                  label: item.label
+                })
+              }
+            })
+            return deviceList || []
+          }).then(res => {
+            let list = [...res]
+            function fun() {
+              if (!list.length) {
+                return
+              }
+              const { deviceId, label } = list[list.length - 1] || {}
+              tryCamera(list[list.length - 1].deviceId).catch(() => {
+                list.pop()
+                fun()
+              })
             }
-        }).then(stream => {
-        if (target.srcObject !== undefined) {
-            target.srcObject = stream
-        } else if (window.URL.createObjectURL) {
-            target.src = window.URL.createObjectURL(stream)
-        } else if (window.webkitURL) {
-            target.src = window.webkitURL.createObjectURL(stream)
-        } else {
-            target.src = stream
-        }
-        target.Inline = true
-        target.onloadedmetadata = () => {
-            target.play()
-            console.log('请将身份证人像对准扫描框')
-        }
+            fun()
 
-        }).catch((e) => {
-            console.log('调用摄像头失败',e)
-            reject()
-        })
+          })
+        }
+        //调用用户媒体设备, 访问摄像头
+        navigator.mediaDevices.getUserMedia({ video: { width: 480, height: 320 } }).then(() => {
+          success()
+        });
       } else {
         alert('不支持访问用户媒体');
       }
@@ -145,6 +188,8 @@
       function cutImg(nodeParam, points, canvasDom) {
         return new Promise((resolve) => {
           try {
+
+
             // 获取 图片/视频高度和宽度，需要和视口比例做匹配，canvas绘制时根据 图片/视频 的原高和宽进行裁剪
             const originWidth = nodeParam.naturalWidth || nodeParam.videoWidth;
             const { startX = 0, startY = 0 } = points || {};
@@ -154,6 +199,8 @@
             const outputHeight = originWidth / (1.58 * 0.7)
             canvasDom.width = originWidth;
             canvasDom.height = nodeParam.videoHeight;
+            console.log(canvasDom.width, canvasDom.height)
+            console.log('orign', originWidth, nodeParam.videoHeight);
             context.drawImage(nodeParam, 0, 0, nodeParam.videoWidth, nodeParam.videoHeight)
             //console.log(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight)
             // context.drawImage(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
@@ -178,6 +225,10 @@
       }
       document.querySelector('#startbutton').addEventListener('click', e => {
         console.log('e', 'ddd');
+
+        document.getElementById('video').addEventListener('loadeddata', () => {
+          video.currentTime = 1; // 确保视频已加载一定时间后再进行捕获
+        });
 
         cutImg(document.querySelector('#video'), points, document.querySelector('#canvas'))
       })
