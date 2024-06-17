@@ -212,7 +212,7 @@
           canvasDom.height = outputHeight;
           console.log(canvasDom.width,canvasDom.height)
           console.log(nodeParam, startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight)
-          context.drawImage(document.querySelector('#video'), startX, startY, originWidth, outputHeight, 0, 0, originWidth, outputHeight);
+          context.drawImage(document.querySelector('#video'), startX.toFixed(2), startY.toFixed(2), originWidth.toFixed(2), outputHeight.toFixed(2), 0, 0, originWidth.toFixed(2), outputHeight.toFixed(2));
           
         const imgData = context.getImageData(0, 0, canvasDom.width,canvasDom.height)
         const newCanvas = document.createElement('canvas')
