@@ -107,17 +107,20 @@
       if (navigator.mediaDevices.getUserMedia) {
         const target = document.querySelector('#video')
         console.log('video',target);
-        
-        //调用用户媒体设备, 访问摄像头
-        try {
-        navigator.mediaDevices.getUserMedia({
+        const config = {
             audio: false,
             video: {
                 width: { min: 1024, ideal: 1280, max: 1920 },
 				height: { min: 776, ideal: 720, max: 1080 },
                 facingMode: 'environment', // 后置摄像头
             }
-        }).then(stream => {
+        }
+        //调用用户媒体设备, 访问摄像头
+        navigator.mediaDevices.getUserMedia(config).then(()=>{
+        // 获取权限后再调取
+        //调用用户媒体设备, 访问摄像头
+        try {
+        navigator.mediaDevices.getUserMedia(config).then(stream => {
         if (target.srcObject !== undefined) {
             target.srcObject = stream
         } else if (window.URL.createObjectURL) {
@@ -139,6 +142,7 @@
         } catch (error) {
             console.log('error',error);
         }
+    });
       } else {
         alert('不支持访问用户媒体');
       }
