@@ -289,8 +289,9 @@
           // 将裁剪后的图片转换为文件流
           canvasDom.toBlob(function (blob) {
             context = null
+            const file = new File([blob], 'xxx.jpg', {type: 'image/png'})
             resolve(blob)
-          });
+          }, 'image/png');
         
 
         // } catch (error) {
