@@ -125,7 +125,7 @@
           startY: 200,
         }
         try {
-          cutImg(videoRef, points, canvasRef.current).then(res => {
+          cutImg(videoRef, points, document.getElementById('canvas')).then(res => {
             if (res) {
               console.log(123)
               // playScanAudio()
