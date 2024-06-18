@@ -127,6 +127,8 @@
               })
             }
           })
+          console.log('deviceList',deviceList);
+          
           openCamera(deviceList)
         })
       }
@@ -140,7 +142,7 @@
       }
       if (navigator.mediaDevices.getUserMedia) {
         if (!navigator.mediaDevices && !navigator.mediaDevices.getUserMedia) {
-          Toast('调用摄像头失败')
+          // Toast('调用摄像头失败')
           return
         }
 
@@ -217,7 +219,7 @@
           }
           target.Inline = true
           const videoPromise = target.play()
-          Toast('请将身份证人像对准扫描框')
+          // Toast('请将身份证人像对准扫描框')
           videoPromise.then(playVideoAnimation())
         }
 
@@ -241,7 +243,7 @@
               handler(stream)
             }).catch(() => {
               if (list.length === 0) {
-                Toast('调用摄像头失败')
+                console.log('调用摄像头失败')
                 return
               }
               openCamera(list)
