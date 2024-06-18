@@ -112,7 +112,7 @@
       const playAnimation = () => {
         requestAnimationFrame(() => cutImg())
       }
-
+      const videoRef = document.querySelector('#video')
       /**
 * @description 获取设备后置摄像头列表，并调用持续拍摄
 */
@@ -167,7 +167,7 @@
 			startY: 200,
 		}
 		try {
-			cutImg(videoRef.current, points, canvasRef.current).then(res => {
+			cutImg(videoRef, points, canvasRef.current).then(res => {
 				if (res) {
 					console.log(res)
 					// playScanAudio()
@@ -204,7 +204,7 @@
         }
 
         const handler = stream => {
-          const target = videoRef.current
+          const target = videoRef
 
           if (target.srcObject !== undefined) {
             target.srcObject = stream
