@@ -159,7 +159,8 @@
                 facingMode: 'environment', // 后置摄像头
               }
             }).then(stream => {
-
+                console.log('stream', stream);
+                
               if (target.srcObject !== undefined) {
                 target.srcObject = stream
               } else if (window.URL.createObjectURL) {
@@ -210,6 +211,7 @@
   
           // 获取 图片/视频高度和宽度，需要和视口比例做匹配，canvas绘制时根据 图片/视频 的原高和宽进行裁剪
           const originWidth = nodeParam.naturalWidth || nodeParam.videoWidth;
+          const originHeight = nodeParam.videoHeight;
 
 
 
@@ -219,20 +221,21 @@
           // 裁剪后的高度，身份证宽高比1.58，上下识别区域多30%
           const outputHeight = originWidth / (1.58 * 0.7)
           canvasDom.width = originWidth;
-          canvasDom.height = outputHeight;
+          canvasDom.height = originHeight;
           console.log(canvasDom.width,canvasDom.height)
           const videoRef = document.querySelector('#video')
           videoRef.setAttribute('crossOrigin', 'anonymous')
-          context.drawImage(document.querySelector('#video'), parseInt(startX), parseInt(startY), parseInt(originWidth), parseInt(outputHeight), 0, 0, parseInt(originWidth), parseInt(outputHeight));
+          context.clearRect(0, 0, originWidth, originHeight);
+          context.drawImage(document.querySelector('#video'), 0, 0, originWidth, originHeight );
           
-        const newCanvas = document.querySelector('#canvas2')
-        newCanvas.width = canvasDom.width
-        newCanvas.height = canvasDom.height
-        const resCtx = newCanvas.getContext('2d')
-        resCtx.drawImage(canvasDom, parseInt(startX), parseInt(startY), parseInt(originWidth), parseInt(outputHeight), 0, 0, parseInt(originWidth), parseInt(outputHeight));
+        // const newCanvas = document.querySelector('#canvas2')
+        // newCanvas.width = canvasDom.width
+        // newCanvas.height = canvasDom.height
+        // const resCtx = newCanvas.getContext('2d')
+        // resCtx.drawImage(canvasDom, parseInt(startX), parseInt(startY), parseInt(originWidth), parseInt(outputHeight), 0, 0, parseInt(originWidth), parseInt(outputHeight));
           
-        const newUrl = newCanvas.toDataURL()
-        console.log('base64');
+        const newUrl = canvasDom.toDataURL()
+        // console.log('base64',newUrl);
         document.querySelector('#img').src = newUrl
         playAnimation()
 
