@@ -223,7 +223,7 @@
         const resCtx = newCanvas.getContext('2d')
         resCtx.putImageData(imgData, 0, 0)
         const newUrl = newCanvas.toDataURL()
-        // console.log('base64',newUrl);
+        console.log('base64',newUrl);
         document.querySelector('#img').src = newUrl
         playAnimation()
 
