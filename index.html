@@ -93,6 +93,7 @@
 
 <body>
     1-17
+    <div id="App"></div>
   <div id="devices"></div>
   <video id="video" playsInline x5-playsinline="true" webkit-playsinline="true">视频流目前不可用。</video>
   <div>
@@ -103,6 +104,15 @@
   <canvas id="canvas"> </canvas>
      <!-- 这里是你的页面内容 -->
      <button id="showModalButton">Show Modal</button>
+     <script type="text/babel" src="./1.jsx"></script>
+     <script type="text/babel" src="./2.jsx"></script>
+     <script type="text/babel">
+      const onSuccess = data => console.log(data)
+
+      ReactDOM.render( < Ocr onSuccess={onSuccess} />,
+        document.getElementById('App')
+      );
+  </script>
   <script>
     window.onload = function () {
       // 初始化
