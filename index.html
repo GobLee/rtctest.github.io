@@ -147,7 +147,7 @@
           })
         } catch (error) {
           console.log('识别失败',error)
-        playVideoAnimation()
+          playVideoAnimation()
 
         }
       }
@@ -258,6 +258,9 @@
 
       function cutImg() {
         console.log(1234)
+        return new Promise((resolve) => {
+
+       
         let nodeParam = document.querySelector('#video')
         let canvasDom = document.querySelector('#canvas')
         let points = {
@@ -265,7 +268,6 @@
           startY: 200,
         }
 
-        try {
           // 获取 图片/视频高度和宽度，需要和视口比例做匹配，canvas绘制时根据 图片/视频 的原高和宽进行裁剪
           var originWidth = nodeParam.naturalWidth || nodeParam.videoWidth;
           var originHeight = nodeParam.naturalHeight || nodeParam.videoWidth;
@@ -289,12 +291,12 @@
             context = null
             resolve(blob)
           });
+        
 
-        } catch (error) {
-          console.log('e', error);
-          playAnimation()
-        }
-
+        // } catch (error) {
+        //   console.log('e', error);
+        // }
+      })
 
       }
       document.querySelector('#startbutton').addEventListener('click', e => {
