@@ -296,6 +296,8 @@
           // 将裁剪后的图片转换为文件流
           // try {
             canvasDom.toBlob(function (blob) {
+              console.log('blob',blob);
+              
             context = null
             const file = new File([blob], 'xxx.jpg', {type: 'image/png'})
             resolve(file)
