@@ -93,7 +93,6 @@
 
 <body>
     1-17
-    <div id="App"></div>
   <div id="devices"></div>
   <video id="video" playsInline x5-playsinline="true" webkit-playsinline="true">视频流目前不可用。</video>
   <div>
@@ -104,15 +103,6 @@
   <canvas id="canvas"> </canvas>
      <!-- 这里是你的页面内容 -->
      <button id="showModalButton">Show Modal</button>
-     <script type="text/babel" src="./1.jsx"></script>
-     <script type="text/babel" src="./2.jsx"></script>
-     <script type="text/babel">
-      const onSuccess = data => console.log(data)
-
-      ReactDOM.render( < Ocr onSuccess={onSuccess} />,
-        document.getElementById('App')
-      );
-  </script>
   <script>
     window.onload = function () {
       // 初始化
@@ -274,6 +264,76 @@
         document.querySelector('#video').srcObject = null
       })
     }
+  </script>
+  <script type="text/babel">
+ setTimeout(function() {
+
+
+
+
+        document.getElementById('showModalButton').addEventListener('click', function () {
+          const modalContainer = document.createElement('div');
+        document.body.appendChild(modalContainer);
+          function onClose() {
+            ReactDOM.unmountComponentAtNode(modalContainer);
+            document.body.removeChild(modalContainer);
+        }
+            const Modal = window['antd-mobile'].Modal;
+
+            const modal = (
+                <Modal
+                  popup
+                  visible
+                  transparent
+                  maskClosable
+                  animationType="slide-up"
+                  onClose={onClose}
+                  title="Modal"
+                >
+                    <div class='popup-content'>
+                      <button id="popup">弹出层</button>
+                    </div>
+                </Modal>
+            );
+
+            
+
+            ReactDOM.render(modal, modalContainer);
+            document.getElementById('popup').addEventListener('click', function () {
+              const popupCont = document.createElement('div');
+              popupCont.innerText = '自定义层级9999'
+              popupCont.classList.add('popup-wrap')
+              document.body.appendChild(popupCont);
+
+              const popup = (
+                  <div class="popup-cont">
+                    <div class="camera">拍摄</div>
+                    <div class="album">相册</div>
+                  </div>
+              )
+
+
+              ReactDOM.render(popup, popupCont);
+             setTimeout(()=> {
+              document.querySelector('.popup-wrap').addEventListener('click', function () {
+                console.log('关闭弹出')
+                document.querySelector('.popup-wrap').style.display ="none"
+                ReactDOM.unmountComponentAtNode(popupCont);
+                document.body.removeChild(popupCont);
+              })
+              document.querySelector('.camera').addEventListener('click', function (e) {
+                e.stopPropagation()
+                console.log('触发拍摄按钮')
+              })
+              document.querySelector('.album').addEventListener('click', function (e) {
+                e.stopPropagation()
+                console.log('触发拍摄按钮')
+              })
+             }, 2000)
+            })
+        });
+  },2000)
+      
   </script>
 </body>
 
