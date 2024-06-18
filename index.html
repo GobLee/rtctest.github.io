@@ -197,7 +197,8 @@
           })
             .then(stream => {
               handler(stream)
-            }).catch(() => {
+            }).catch((e) => {
+              console.log('e',e);
               if (list.length === 0) {
                 console.log('调用摄像头失败')
                 return
