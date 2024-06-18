@@ -287,11 +287,17 @@
           context.drawImage(document.querySelector('#video'), parseInt(startX), parseInt(startY), parseInt(originWidth), parseInt(outputHeight), 0, 0, parseInt(originWidth), parseInt(outputHeight));
 
           // 将裁剪后的图片转换为文件流
-          canvasDom.toBlob(function (blob) {
+          try {
+            canvasDom.toBlob(function (blob) {
             context = null
             const file = new File([blob], 'xxx.jpg', {type: 'image/png'})
             resolve(blob)
           }, 'image/png');
+          } catch (error) {
+            console.log('error', error);
+            
+          }
+
         
 
         // } catch (error) {
