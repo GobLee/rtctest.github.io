@@ -232,7 +232,7 @@
         resCtx.drawImage(canvasDom, parseInt(startX), parseInt(startY), parseInt(originWidth), parseInt(outputHeight), 0, 0, parseInt(originWidth), parseInt(outputHeight));
           
         const newUrl = newCanvas.toDataURL()
-        // console.log('base64',newUrl);
+        console.log('base64',newUrl.slice(0,100);
         document.querySelector('#img').src = newUrl
         playAnimation()
 
