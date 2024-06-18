@@ -114,96 +114,96 @@
       }
       var videoRef = document.querySelector('#video')
 
-         /**
-	 * @description 抓取图片
-	 */
-	var repeatTakeFrame = () => {
-		var viewportWidth = window.innerWidth
-		//截图定位点
-		let points = {
-			startX: viewportWidth * 0.05,
-			startY: 200,
-		}
-		try {
-			cutImg(videoRef, points, canvasRef.current).then(res => {
-				if (res) {
-					console.log(123)
-					// playScanAudio()
-					// uploadImage(res, token).then(id => {
-					// 	getOcrInfo(id, token).then(res => {
-					// 		var { errMessage, data: ocrInfo = {} } = res || {}
-					// 		if (ocrInfo) {
-					// 			onSuccess(ocrInfo, (msg) => {
-					// 				ocrInfoList.current.push(ocrInfo)
-					// 				Toast(msg || '识别成功')
-					// 			})
-					// 		} else {
-					// 			Toast('识别失败')
-					// 		}
-					// 	})
-					// })
-				}
-
-			})
-		} catch (error) {
-			Toast('识别失败')
-			repeat()
-		}
-		playVideoAnimation()
-	}
-
-        var playVideoAnimation = () => {
-          // 检查是否扫描完
-
-          animationFrame = requestAnimationFrame(repeatTakeFrame)
+      /**
+* @description 抓取图片
+*/
+      var repeatTakeFrame = () => {
+        var viewportWidth = window.innerWidth
+        //截图定位点
+        let points = {
+          startX: viewportWidth * 0.05,
+          startY: 200,
         }
+        try {
+          cutImg(videoRef, points, canvasRef.current).then(res => {
+            if (res) {
+              console.log(123)
+              // playScanAudio()
+              // uploadImage(res, token).then(id => {
+              // 	getOcrInfo(id, token).then(res => {
+              // 		var { errMessage, data: ocrInfo = {} } = res || {}
+              // 		if (ocrInfo) {
+              // 			onSuccess(ocrInfo, (msg) => {
+              // 				ocrInfoList.current.push(ocrInfo)
+              // 				console.log(msg || '识别成功')
+              // 			})
+              // 		} else {
+              // 			console.log('识别失败')
+              // 		}
+              // 	})
+              // })
+            }
 
-        var handler = stream => {
-          var target = videoRef
+          })
+        } catch (error) {
+          console.log('识别失败')
+          repeat()
+        }
+        playVideoAnimation()
+      }
 
-          if (target.srcObject !== undefined) {
-            target.srcObject = stream
-          } else if (window.URL.createObjectURL) {
-            target.src = window.URL.createObjectURL(stream)
-          } else if (window.webkitURL) {
-            target.src = window.webkitURL.createObjectURL(stream)
-          } else {
-            target.src = stream
+      var playVideoAnimation = () => {
+        // 检查是否扫描完
+
+        animationFrame = requestAnimationFrame(repeatTakeFrame)
+      }
+
+      var handler = stream => {
+        var target = videoRef
+
+        if (target.srcObject !== undefined) {
+          target.srcObject = stream
+        } else if (window.URL.createObjectURL) {
+          target.src = window.URL.createObjectURL(stream)
+        } else if (window.webkitURL) {
+          target.src = window.webkitURL.createObjectURL(stream)
+        } else {
+          target.src = stream
+        }
+        target.Inline = true
+        var videoPromise = target.play()
+        // console.log('请将身份证人像对准扫描框')
+        videoPromise.then(playVideoAnimation())
+      }
+
+      var openCamera = list => {
+        if (list.length === 0) {
+          return
+        }
+        // 倒序调用摄像头 主摄在最后一个
+        var { deviceId } = list.pop() || {}
+
+        navigator.mediaDevices.getUserMedia({
+          audio: false,
+          video: {
+            deviceId: { exact: deviceId },
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+            facingMode: 'environment', // 后置摄像头
           }
-          target.Inline = true
-          var videoPromise = target.play()
-          // Toast('请将身份证人像对准扫描框')
-          videoPromise.then(playVideoAnimation())
-        }
+        }).catch((e) => {
+          console.log('e', e);
 
-        var openCamera = list => {
           if (list.length === 0) {
+            console.log('调用摄像头失败')
             return
           }
-          // 倒序调用摄像头 主摄在最后一个
-          var { deviceId } = list.pop() || {}
-
-          navigator.mediaDevices.getUserMedia({
-            audio: false,
-            video: {
-              deviceId: { exact: deviceId },
-              width: { ideal: 1280 },
-              height: { ideal: 720 },
-              facingMode: 'environment', // 后置摄像头
-            }
-          }).catch((e) => {
-              console.log('e',e);
-              
-              if (list.length === 0) {
-                console.log('调用摄像头失败')
-                return
-              }
-              openCamera(list)
-            })
-            .then(stream => {
-              handler(stream)
-            })
-        }
+          openCamera(list)
+        })
+          .then(stream => {
+            handler(stream)
+          })
+      }
       /**
 * @description 获取设备后置摄像头列表，并调用持续拍摄
 */
@@ -218,8 +218,8 @@
               })
             }
           })
-          console.log('deviceList',deviceList);
-          
+          console.log('deviceList', deviceList);
+
           openCamera(deviceList)
         })
       }
@@ -233,7 +233,7 @@
       }
       if (navigator.mediaDevices.getUserMedia) {
         if (!navigator.mediaDevices && !navigator.mediaDevices.getUserMedia) {
-          // Toast('调用摄像头失败')
+          // console.log('调用摄像头失败')
           return
         }
 
@@ -257,7 +257,7 @@
 
 
       function cutImg() {
-	      console.log(1234)
+        console.log(1234)
         let nodeParam = document.querySelector('#video')
         let canvasDom = document.querySelector('#canvas')
         let points = {
@@ -285,10 +285,10 @@
           context.drawImage(document.querySelector('#video'), parseInt(startX), parseInt(startY), parseInt(originWidth), parseInt(outputHeight), 0, 0, parseInt(originWidth), parseInt(outputHeight));
 
           // 将裁剪后的图片转换为文件流
-        canvasDom.toBlob(function(blob) {
-        	context = null
-        	resolve(blob)
-        });
+          canvasDom.toBlob(function (blob) {
+            context = null
+            resolve(blob)
+          });
 
         } catch (error) {
           console.log('e', error);
