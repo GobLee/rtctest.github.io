@@ -126,6 +126,8 @@
         }
         try {
           cutImg(videoRef, points, document.getElementById('canvas')).then(res => {
+            console.log('then',res);
+            
             if (res) {
               console.log(123)
               playVideoAnimation()
