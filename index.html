@@ -154,10 +154,7 @@
 
         var playVideoAnimation = () => {
           // 检查是否扫描完
-          if (checkOcrDone()) {
-            cancelAnimationFrame(animationFrame)
-            return
-          }
+
           animationFrame = requestAnimationFrame(repeatTakeFrame)
         }
 
