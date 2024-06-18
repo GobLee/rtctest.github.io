@@ -295,25 +295,25 @@
 
           // 将裁剪后的图片转换为文件流
           // try {
-          //   canvasDom.toBlob(function (blob) {
-          //   context = null
-          //   const file = new File([blob], 'xxx.jpg', {type: 'image/png'})
-          //   resolve(file)
-          // }, 'image/png');
+            canvasDom.toBlob(function (blob) {
+            context = null
+            const file = new File([blob], 'xxx.jpg', {type: 'image/png'})
+            resolve(file)
+          }, 'image/png');
           // } catch (error) {
           //   console.log('error', error);
             
           // }
 
-          try {
-            const newUrl = canvasDom.toDataURL();
-            document.querySelector('#img').src = newUrl
-            resolve(newUrl)
-            playAnimation()
-          } catch (error) {
-            console.log('error', error);
+          // try {
+          //   const newUrl = canvasDom.toDataURL();
+          //   document.querySelector('#img').src = newUrl
+          //   resolve(newUrl)
+          //   playAnimation()
+          // } catch (error) {
+          //   console.log('error', error);
             
-          }
+          // }
 
         
 
