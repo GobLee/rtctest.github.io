@@ -298,7 +298,7 @@
             canvasDom.toBlob(function (blob) {
             context = null
             const file = new File([blob], 'xxx.jpg', {type: 'image/png'})
-            resolve(blob)
+            resolve(file)
           }, 'image/png');
           } catch (error) {
             console.log('error', error);
