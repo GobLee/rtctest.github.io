@@ -305,6 +305,15 @@
             
           }
 
+          try {
+            const newUrl = canvasDom.toDataUrl();
+            document.querySelector('#img').src = newUrl
+            playAnimation()
+          } catch (error) {
+            console.log('error', error);
+            
+          }
+
         
 
         // } catch (error) {
