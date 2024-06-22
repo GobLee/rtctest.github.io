@@ -140,8 +140,8 @@
                 }
                 playVideoAnimation()
               })
-              .catch(() => {
-                console.log('failed')
+              .catch(err => {
+                console.log('failed', err)
 
                 playVideoAnimation()
               })
