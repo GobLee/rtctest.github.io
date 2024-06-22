@@ -261,8 +261,8 @@
         }
         var viewportWidth = window.innerWidth
 
-        function cutImg(nodeParam, canvasDom) {
-          return new Promise((resolve, points, reject) => {
+        function cutImg(nodeParam, points, canvasDom) {
+          return new Promise((resolve, reject) => {
             try {
               // 获取 图片/视频高度和宽度，需要和视口比例做匹配，canvas绘制时根据 图片/视频 的原高和宽进行裁剪
               var originWidth = nodeParam.naturalWidth || nodeParam.videoWidth
