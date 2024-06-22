@@ -262,7 +262,7 @@
         var viewportWidth = window.innerWidth
 
         function cutImg(nodeParam, canvasDom) {
-          return new Promise(resolve => {
+          return new Promise((resolve, reject) => {
             try {
               let points = {
                 startX: viewportWidth * 0.05,
