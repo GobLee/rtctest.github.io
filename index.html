@@ -1,341 +1,324 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.bootcss.com/vConsole/3.3.4/vconsole.min.js"></script>
+    <!-- 引入 antd-mobile 样式表 -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.bootcdn.net/ajax/libs/antd-mobile/2.2.5/antd-mobile.min.css"
+    />
+    <!-- 引入 React、ReactDOM 和 antd-mobile 的 JS 文件 -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/react/16.14.0/umd/react.production.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/react-dom/16.14.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/antd-mobile/2.2.5/antd-mobile.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.3.2/dist/html2canvas.min.js"></script>
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <script src="https://cdn.bootcss.com/vConsole/3.3.4/vconsole.min.js"></script>
-  <!-- 引入 antd-mobile 样式表 -->
-  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/antd-mobile/2.2.5/antd-mobile.min.css">
-  <!-- 引入 React、ReactDOM 和 antd-mobile 的 JS 文件 -->
-  <script src="https://cdn.bootcdn.net/ajax/libs/react/16.14.0/umd/react.production.min.js"></script>
-  <script src="https://cdn.bootcdn.net/ajax/libs/react-dom/16.14.0/umd/react-dom.production.min.js"></script>
-  <script src="https://cdn.bootcdn.net/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
-  <script src="https://cdn.bootcdn.net/ajax/libs/antd-mobile/2.2.5/antd-mobile.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.3.2/dist/html2canvas.min.js"></script>
-
-  <style>
-    video {
-      width: 100%;
-      height: auto;
-    }
-
-    #startbutton {
-      height: 40px;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    button {
-      width: 100px;
-      height: 40px;
-    }
-
-    canvas {
-      display: none;
-      width: 100%;
-      height: auto;
-    }
-
-    img {
-      width: 100%;
-    }
-
-    .popup-content {
-      width: 100%;
-      height: 400px;
-      -webkit-transform: translateZ(1px);
-      -moz-transform: translateZ(1px);
-      -o-transform: translateZ(1px);
-      transform: translateZ(1px);
-    }
-
-
-    .popup-cont {
-      position: absolute;
-      bottom: 0;
-      width: 100vw;
-      height: auto;
-      z-index: 9999;
-      -webkit-transform: translateZ(1px);
-      -moz-transform: translateZ(1px);
-      -o-transform: translateZ(1px);
-      transform: translateZ(1px);
-    }
-
-    .popup-wrap {
-      position: fixed;
-      height: 100vh;
-      width: 100vw;
-      top: 0;
-      left: 0;
-      /* pointer-events: none; */
-      background-color: rgba(101, 109, 250, 0.2);
-      -webkit-transform: translateZ(1px);
-      -moz-transform: translateZ(1px);
-      -o-transform: translateZ(1px);
-      transform: translateZ(1px);
-      z-index: 9999;
-    }
-
-    .camera,
-    .album {
-      width: 100%;
-      height: 100px;
-      line-height: 100px;
-      text-align: center;
-      background-color: #ccc;
-    }
-  </style>
-</head>
-
-<body>
-  1-17
-  <div id="App"></div>
-  <div id="devices"></div>
-  <video id="video" playsInline x5-playsinline="true" webkit-playsinline="true">视频流目前不可用。</video>
-  <div>
-    <button id="startbutton">拍摄照片</button>
-    <button id="stopCamera">停止拍摄</button>
-  </div>
-  <img id="img">
-  <canvas id="canvas"> </canvas>
-  <!-- 这里是你的页面内容 -->
-  <button id="showModalButton">Show Modal</button>
-  <script>
-    window.onload = function () {
-      // 初始化
-      var vConsole = new VConsole();
-      console.log('userAgent', navigator.userAgent);
-      var playAnimation = () => {
-        requestAnimationFrame(() => cutImg())
-      }
-      var videoRef = document.querySelector('#video')
-
-      /**
-* @description 抓取图片
-*/
-      var repeatTakeFrame = () => {
-        var viewportWidth = window.innerWidth
-        //截图定位点
-        let points = {
-          startX: viewportWidth * 0.05,
-          startY: 200,
-        }
-        try {
-          cutImg(videoRef, points, document.getElementById('canvas')).then(res => {
-            console.log('then',res);
-            
-            if (res) {
-              console.log(123)
-              // playScanAudio()
-              // uploadImage(res, token).then(id => {
-              // 	getOcrInfo(id, token).then(res => {
-              // 		var { errMessage, data: ocrInfo = {} } = res || {}
-              // 		if (ocrInfo) {
-              // 			onSuccess(ocrInfo, (msg) => {
-              // 				ocrInfoList.current.push(ocrInfo)
-              // 				console.log(msg || '识别成功')
-              // 			})
-              // 		} else {
-              // 			console.log('识别失败')
-              // 		}
-              // 	})
-              // })
-            }
-            playVideoAnimation()
-
-          }).catch(() => {
-            console.log('failed');
-            
-            playVideoAnimation()
-          })
-        } catch (error) {
-          console.log('识别失败',error)
-          playVideoAnimation()
-
-        }
+    <style>
+      video {
+        width: 100%;
+        height: auto;
       }
 
-      var playVideoAnimation = () => {
-        // 检查是否扫描完
-
-        animationFrame = requestAnimationFrame(repeatTakeFrame)
+      #startbutton {
+        height: 40px;
+        margin: 0 auto;
+        text-align: center;
       }
 
-      var handler = stream => {
-        var target = videoRef
-
-        if (target.srcObject !== undefined) {
-          target.srcObject = stream
-        } else if (window.URL.createObjectURL) {
-          target.src = window.URL.createObjectURL(stream)
-        } else if (window.webkitURL) {
-          target.src = window.webkitURL.createObjectURL(stream)
-        } else {
-          target.src = stream
-        }
-        target.Inline = true
-        var videoPromise = target.play()
-        // console.log('请将身份证人像对准扫描框')
-        videoPromise.then(playVideoAnimation())
+      button {
+        width: 100px;
+        height: 40px;
       }
 
-      var openCamera = list => {
-        if (list.length === 0) {
-          return
-        }
-        // 倒序调用摄像头 主摄在最后一个
-        var { deviceId } = list.pop() || {}
+      canvas {
+        display: none;
+        width: 100%;
+        height: auto;
+      }
 
-        navigator.mediaDevices.getUserMedia({
-          audio: false,
-          video: {
-            deviceId: { exact: deviceId },
-            width: { ideal: 1280 },
-            height: { ideal: 720 },
-            facingMode: 'environment', // 后置摄像头
+      img {
+        width: 100%;
+      }
+
+      .popup-content {
+        width: 100%;
+        height: 400px;
+        -webkit-transform: translateZ(1px);
+        -moz-transform: translateZ(1px);
+        -o-transform: translateZ(1px);
+        transform: translateZ(1px);
+      }
+
+      .popup-cont {
+        position: absolute;
+        bottom: 0;
+        width: 100vw;
+        height: auto;
+        z-index: 9999;
+        -webkit-transform: translateZ(1px);
+        -moz-transform: translateZ(1px);
+        -o-transform: translateZ(1px);
+        transform: translateZ(1px);
+      }
+
+      .popup-wrap {
+        position: fixed;
+        height: 100vh;
+        width: 100vw;
+        top: 0;
+        left: 0;
+        /* pointer-events: none; */
+        background-color: rgba(101, 109, 250, 0.2);
+        -webkit-transform: translateZ(1px);
+        -moz-transform: translateZ(1px);
+        -o-transform: translateZ(1px);
+        transform: translateZ(1px);
+        z-index: 9999;
+      }
+
+      .camera,
+      .album {
+        width: 100%;
+        height: 100px;
+        line-height: 100px;
+        text-align: center;
+        background-color: #ccc;
+      }
+    </style>
+  </head>
+
+  <body>
+    1-17
+    <div id="App"></div>
+    <div id="devices"></div>
+    <video
+      id="video"
+      playsinline
+      x5-playsinline="true"
+      webkit-playsinline="true"
+    >
+      视频流目前不可用。
+    </video>
+    <div>
+      <button id="startbutton">拍摄照片</button>
+      <button id="stopCamera">停止拍摄</button>
+    </div>
+    <img id="img" />
+    <canvas id="canvas"> </canvas>
+    <!-- 这里是你的页面内容 -->
+    <button id="showModalButton">Show Modal</button>
+    <script>
+      window.onload = function () {
+        // 初始化
+        var vConsole = new VConsole()
+
+        console.log('userAgent', navigator.userAgent)
+
+        var videoDom = document.querySelector('#video')
+        var canvasDom = document.querySelector('#canvas')
+
+        /**
+         * @description 抓取图片
+         */
+        var repeatTakeFrame = () => {
+          var viewportWidth = window.innerWidth
+          //截图定位点
+          let points = {
+            startX: viewportWidth * 0.05,
+            startY: 200
           }
-        }).catch((e) => {
-          console.log('e', e);
+          try {
+            cutImg(videoDom, points, canvasDom)
+              .then(res => {
+                if (res) {
+                  console.log(res)
+                }
+                playVideoAnimation()
+              })
+              .catch(() => {
+                console.log('failed')
 
+                playVideoAnimation()
+              })
+          } catch (error) {
+            console.log('识别失败', error)
+            playVideoAnimation()
+          }
+        }
+
+        var playVideoAnimation = () => {
+          // 检查是否扫描完
+          animationFrame = requestAnimationFrame(repeatTakeFrame)
+        }
+
+        var handler = stream => {
+          var target = videoDom
+
+          if (target.srcObject !== undefined) {
+            target.srcObject = stream
+          } else if (window.URL.createObjectURL) {
+            target.src = window.URL.createObjectURL(stream)
+          } else if (window.webkitURL) {
+            target.src = window.webkitURL.createObjectURL(stream)
+          } else {
+            target.src = stream
+          }
+          target.Inline = true
+          var videoPromise = target.play()
+          // console.log('请将身份证人像对准扫描框')
+          videoPromise.then(playVideoAnimation())
+        }
+
+        var openCamera = list => {
           if (list.length === 0) {
+            return
+          }
+          // 倒序调用摄像头 主摄在最后一个
+          var { deviceId } = list.pop() || {}
+
+          navigator.mediaDevices
+            .getUserMedia({
+              audio: false,
+              video: {
+                deviceId: { exact: deviceId },
+                // width: { ideal: 1280 },
+                // height: { ideal: 720 },
+                facingMode: 'environment' // 后置摄像头
+              }
+            })
+            .catch(e => {
+              console.log('e', e)
+
+              if (list.length === 0) {
+                console.log('调用摄像头失败')
+                return
+              }
+              openCamera(list)
+            })
+            .then(stream => {
+              handler(stream)
+            })
+        }
+        /**
+         * @description 获取设备后置摄像头列表，并调用持续拍摄
+         */
+        var getDeviceListScan = () => {
+          navigator.mediaDevices.enumerateDevices().then(res => {
+            var deviceList = []
+            res.map(item => {
+              if (
+                item.deviceId &&
+                item.kind === 'videoinput' &&
+                item.label.indexOf('front') === -1 &&
+                item.label.indexOf('前置') === -1
+              ) {
+                deviceList.push({
+                  deviceId: item.deviceId,
+                  label: item.label
+                })
+              }
+            })
+            console.log('deviceList', deviceList)
+
+            openCamera(deviceList)
+          })
+        }
+        // 释放视频流
+        var stopStream = stream => {
+          if (stream) {
+            stream.getTracks().forEach(function (track) {
+              track.stop()
+            })
+          }
+        }
+
+        if (navigator.mediaDevices.getUserMedia) {
+          if (!navigator.mediaDevices && !navigator.mediaDevices.getUserMedia) {
             console.log('调用摄像头失败')
             return
           }
-          openCamera(list)
-        })
-          .then(stream => {
-            handler(stream)
-          })
-      }
-      /**
-* @description 获取设备后置摄像头列表，并调用持续拍摄
-*/
-      var getDeviceListScan = () => {
-        navigator.mediaDevices.enumerateDevices().then(res => {
-          var deviceList = []
-          res.map(item => {
-            if (item.deviceId && item.kind === 'videoinput' && item.label.indexOf('front') === -1 && item.label.indexOf('前置') === -1) {
-              deviceList.push({
-                deviceId: item.deviceId,
-                label: item.label
-              })
+
+          // 第一次申请权限获取设备列表信息
+          navigator.mediaDevices
+            .getUserMedia({
+              video: {
+                width: 480,
+                height: 320
+              },
+              audio: false
+            })
+            .then(stream => {
+              getDeviceListScan()
+              stopStream(stream)
+            })
+        } else {
+          alert('不支持访问用户媒体')
+        }
+        var viewportWidth = window.innerWidth
+
+        function cutImg(nodeParam, canvasDom) {
+          return new Promise(resolve => {
+            let points = {
+              startX: viewportWidth * 0.05,
+              startY: 200
             }
-          })
-          console.log('deviceList', deviceList);
 
-          openCamera(deviceList)
-        })
-      }
-      // 释放视频流
-      var stopStream = (stream) => {
-        if (stream) {
-          stream.getTracks().forEach(function (track) {
-            track.stop();
-          });
-        }
-      }
-      if (navigator.mediaDevices.getUserMedia) {
-        if (!navigator.mediaDevices && !navigator.mediaDevices.getUserMedia) {
-          // console.log('调用摄像头失败')
-          return
-        }
+            // 获取 图片/视频高度和宽度，需要和视口比例做匹配，canvas绘制时根据 图片/视频 的原高和宽进行裁剪
+            var originWidth = nodeParam.naturalWidth || nodeParam.videoWidth
+            var originHeight = nodeParam.naturalHeight || nodeParam.videoHeight
 
-        // 第一次申请权限获取设备列表信息
-        navigator.mediaDevices.getUserMedia({
-          video: {
-            width: 480,
-            height: 320
-          },
-          audio: false
-        }).then((stream) => {
-          getDeviceListScan()
-          stopStream(stream)
-        })
+            var { startX = 0, startY = 0 } = points || {}
 
-      } else {
-        alert('不支持访问用户媒体');
-      }
-      var viewportWidth = window.innerWidth
+            let context = canvasDom.getContext('2d')
+            // 裁剪后的高度，身份证宽高比1.58，上下识别区域多30%
+            var outputHeight = originWidth / (1.58 * 0.7)
+            canvasDom.width = originWidth
+            canvasDom.height = outputHeight
+            console.log(canvasDom.width, canvasDom.height)
+            videoDom.setAttribute('crossOrigin', 'anonymous')
 
+            context.drawImage(
+              document.querySelector('#video'),
+              parseInt(startX),
+              parseInt(startY),
+              parseInt(originWidth),
+              parseInt(outputHeight),
+              0,
+              0,
+              parseInt(originWidth),
+              parseInt(outputHeight)
+            )
 
-
-      function cutImg() {
-        console.log(1234)
-        return new Promise((resolve) => {
-
-       
-        let nodeParam = document.querySelector('#video')
-        let canvasDom = document.querySelector('#canvas')
-        let points = {
-          startX: viewportWidth * 0.05,
-          startY: 200,
-        }
-
-          // 获取 图片/视频高度和宽度，需要和视口比例做匹配，canvas绘制时根据 图片/视频 的原高和宽进行裁剪
-          var originWidth = nodeParam.naturalWidth || nodeParam.videoWidth;
-          var originHeight = nodeParam.naturalHeight || nodeParam.videoWidth;
-
-
-          var { startX = 0, startY = 0 } = points || {};
-
-          let context = canvasDom.getContext('2d');
-          // 裁剪后的高度，身份证宽高比1.58，上下识别区域多30%
-          var outputHeight = originWidth / (1.58 * 0.7)
-          canvasDom.width = originWidth;
-          canvasDom.height = outputHeight;
-          console.log(canvasDom.width, canvasDom.height)
-          var videoRef = document.querySelector('#video')
-          videoRef.setAttribute('crossOrigin', 'anonymous')
-
-          context.drawImage(document.querySelector('#video'), parseInt(startX), parseInt(startY), parseInt(originWidth), parseInt(outputHeight), 0, 0, parseInt(originWidth), parseInt(outputHeight));
-
-          // 将裁剪后的图片转换为文件流
-          // try {
+            // 将裁剪后的图片转换为文件流
+            // try {
             canvasDom.toBlob(function (blob) {
-              console.log('blob',blob);
-              
-            context = null
-            const file = new File([blob], 'xxx.jpg', {type: 'image/png'})
-            resolve(file)
-          }, 'image/png');
-          // } catch (error) {
-          //   console.log('error', error);
-            
-          // }
+              //   console.log('blob', blob)
 
-          // try {
-          //   const newUrl = canvasDom.toDataURL();
-          //   document.querySelector('#img').src = newUrl
-          //   resolve(newUrl)
-          //   playAnimation()
-          // } catch (error) {
-          //   console.log('error', error);
-            
-          // }
+              //   context = null
+              //   const file = new File([blob], 'xxx.jpg', { type: 'image/png' })
+              //   resolve(file)
+              // }, 'image/png')
+              // } catch (error) {
+              //   console.log('error', error);
+              // }
 
-        
-
-        // } catch (error) {
-        //   console.log('e', error);
-        // }
-      })
-
+              try {
+                const newUrl = canvasDom.toDataURL()
+                document.querySelector('#img').src = newUrl
+                resolve(newUrl)
+              } catch (error) {
+                console.log('error', error)
+                reject()
+              }
+            })
+          })
+        }
       }
-      document.querySelector('#startbutton').addEventListener('click', e => {
-        console.log('requestanimation');
-      })
-      document.querySelector('#stopCamera').addEventListener('click', e => {
-        document.querySelector('#video').srcObject.getTracks().forEach(track => {
-          track.stop()
-        })
-        document.querySelector('#video').srcObject = null
-      })
-    }
-  </script>
-</body>
-
+    </script>
+  </body>
 </html>
