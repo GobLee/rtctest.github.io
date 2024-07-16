@@ -1,318 +1,2015 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <script src="https://cdn.bootcss.com/vConsole/3.3.4/vconsole.min.js"></script>
-    <!-- 引入 antd-mobile 样式表 -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.bootcdn.net/ajax/libs/antd-mobile/2.2.5/antd-mobile.min.css"
-    />
-    <!-- 引入 React、ReactDOM 和 antd-mobile 的 JS 文件 -->
-    <script src="https://cdn.bootcdn.net/ajax/libs/react/16.14.0/umd/react.production.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/react-dom/16.14.0/umd/react-dom.production.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/antd-mobile/2.2.5/antd-mobile.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.3.2/dist/html2canvas.min.js"></script>
+<html>
 
-    <style>
-      video {
-        width: 100%;
-        height: auto;
-      }
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="Cache-Control" content="private">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+	<meta http-equiv="Cache" content="no-cache">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Expires" content="0">
+	<title>地图导航</title>
+	<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
+	<script src="https://map.qq.com/api/gljs?v=1.exp&amp;key=XT4BZ-NX7L4-YCTUT-XKHRE-IPNRH-U3BF4"></script>
+	<style type="text/css">
+		.tmap-zoom-control {
+			margin: 10px 30px 20px 30px;
+			display: -ms-flexbox;
+			display: flex;
+			-ms-flex-direction: column;
+			flex-direction: column;
+			-ms-flex-pack: center;
+			justify-content: center;
+			-ms-flex-align: center;
+			align-items: center;
+			position: relative;
+			width: 40px;
+			height: 80px;
+			background: #fff;
+			box-shadow: 0px 8px 19px rgba(41, 64, 102, 0.12);
+			border-radius: 4px;
+		}
 
-      #startbutton {
-        height: 40px;
-        margin: 0 auto;
-        text-align: center;
-      }
+		.tmap-zoom-control .tmap-zoom-content {
+			-ms-flex: auto;
+			flex: auto;
+			-ms-flex-order: 1;
+			order: 1;
+			-ms-flex-positive: 0;
+			flex-grow: 0;
+			margin: 8px 0px;
+		}
 
-      button {
-        width: 100px;
-        height: 40px;
-      }
+		.tmap-zoom-control .tmap-zoom-in {
+			position: absolute;
+			width: 24px;
+			height: 24px;
+			left: 8px;
+			top: 8px;
+		}
 
-      canvas {
-        display: none;
-        width: 100%;
-        height: auto;
-      }
+		.tmap-zoom-control .tmap-zoom-out {
+			position: absolute;
+			width: 24px;
+			height: 24px;
+			left: 8px;
+			top: 48px;
+		}
 
-      img {
-        width: 100%;
-      }
+		.tmap-zoom-control .tmap-zoom-spliter {
+			height: 1px;
+			width: 40px;
+			background-color: #dee2e8;
+			margin: auto;
+		}
 
-      .popup-content {
-        width: 100%;
-        height: 400px;
-        -webkit-transform: translateZ(1px);
-        -moz-transform: translateZ(1px);
-        -o-transform: translateZ(1px);
-        transform: translateZ(1px);
-      }
+		.tmap-zoom-control .tmap-zoom-number {
+			display: inline;
+			height: 22px;
+			top: 40px;
+			text-align: center;
+			font-size: 14px;
+			font-weight: 600;
+			font-style: medium;
+			font-family: 'Microsoft YaHei', 'PingFang SC';
+			color: #000;
+			line-height: 22px;
+		}
+	</style>
+	<style type="text/css">
+		.rotate-circle {
+			position: relative;
+			width: 60px;
+			height: 60px;
+			padding: 20px 20px 7px 20px;
+			box-sizing: content-box;
+		}
 
-      .popup-cont {
-        position: absolute;
-        bottom: 0;
-        width: 100vw;
-        height: auto;
-        z-index: 9999;
-        -webkit-transform: translateZ(1px);
-        -moz-transform: translateZ(1px);
-        -o-transform: translateZ(1px);
-        transform: translateZ(1px);
-      }
+		.rotate-circle * {
+			box-sizing: content-box;
+		}
 
-      .popup-wrap {
-        position: fixed;
-        height: 100vh;
-        width: 100vw;
-        top: 0;
-        left: 0;
-        /* pointer-events: none; */
-        background-color: rgba(101, 109, 250, 0.2);
-        -webkit-transform: translateZ(1px);
-        -moz-transform: translateZ(1px);
-        -o-transform: translateZ(1px);
-        transform: translateZ(1px);
-        z-index: 9999;
-      }
+		.rotate-circle .rotate-panel {
+			position: relative;
+			left: 0;
+			top: -60px;
+			font-size: 16px;
+			line-height: normal;
+			font-family: auto;
+		}
 
-      .camera,
-      .album {
-        width: 100%;
-        height: 100px;
-        line-height: 100px;
-        text-align: center;
-        background-color: #ccc;
-      }
-    </style>
-  </head>
+		.rotate-circle .rotate-left {
+			position: absolute;
+			top: 15px;
+			left: -6px;
+			width: 30px;
+			height: 30px;
+			border-radius: 30px 0 0 0;
+			background: #fff;
+			transform: rotate(-45deg);
+		}
 
-  <body>
-    1-17
-    <div id="App"></div>
-    <div id="devices"></div>
-    <video
-      id="video"
-      playsinline
-      x5-playsinline="true"
-      webkit-playsinline="true"
-    >
-      视频流目前不可用。
-    </video>
-    <div>
-      <button id="startbutton">拍摄照片</button>
+		.rotate-circle .rotate-top {
+			position: absolute;
+			left: 15px;
+			top: -6px;
+			width: 30px;
+			height: 30px;
+			border-radius: 30px 0 0 0;
+			background: #fff;
+			transform: rotate(45deg);
+		}
 
-      <button id="stopCamera">停止拍摄</button>
-    </div>
-    <img id="img" />
-    <canvas id="canvas"> </canvas>
-    <!-- 这里是你的页面内容 -->
-    <button id="showModalButton">Show Modal</button>
-    <script>
-      window.onload = function () {
-        // 初始化
-        var vConsole = new VConsole()
+		.rotate-circle .rotate-right {
+			position: absolute;
+			left: 36px;
+			top: 15px;
+			width: 30px;
+			height: 30px;
+			border-radius: 0 30px 0 0;
+			background: #fff;
+			transform: rotate(45deg);
+		}
 
-        var videoDom = document.querySelector('#video')
-        var canvasDom = document.querySelector('#canvas')
+		.rotate-circle .rotate-bottom {
+			position: absolute;
+			left: 15px;
+			top: 36px;
+			width: 30px;
+			height: 30px;
+			border-radius: 0 0 30px 0;
+			background: #fff;
+			transform: rotate(45deg);
+		}
 
-        var scanConfig = deviceId => ({
-          audio: false,
-          video: {
-            deviceId: { exact: deviceId },
-            width: { ideal: 1080 },
-            height: { ideal: 720 },
-            facingMode: 'environment', // 后置摄像头
-            focusMode: 'continuous',
-          }
-        })
+		.rotate-circle .compass-circle {
+			width: 28px;
+			height: 28px;
+			background: #fff;
+			border: 1px solid rgba(0, 20, 51, 0.10);
+			border-radius: 50%;
+			position: relative;
+			left: 15px;
+			top: -15px;
+			z-index: 100;
+		}
 
-        /**
-         * @description 抓取图片
-         */
-        var repeatTakeFrame = () => {
-          var viewportWidth = window.innerWidth
-          //截图定位点
-          let points = {
-            startX: viewportWidth * 0.05,
-            startY: 200
-          }
-          try {
-            cutImg(videoDom, points, canvasDom)
-              .then(res => {
-                if (res) {
-                  console.log(res)
-                }
-                playVideoAnimation()
-              })
-              .catch(err => {
-                console.log('failed', err)
+		.rotate-circle .compass-img {
+			height: 28px;
+			left: 30%;
+			position: relative;
+			-moz-user-select: none;
+			/*火狐*/
+			-webkit-user-select: none;
+			/*webkit浏览器*/
+			-ms-user-select: none;
+			user-select: none;
+		}
 
-                playVideoAnimation()
-              })
-          } catch (error) {
-            console.log('识别失败', error)
-            playVideoAnimation()
-          }
-        }
+		.rotate-circle .compass-circle-background {
+			width: 28px;
+			height: 28px;
+			background: #e7eaef;
+			border: 1px solid rgba(0, 20, 51, 0.10);
+			border-radius: 50%;
+			position: relative;
+			left: 15px;
+			top: 15px;
+			z-index: 50;
+		}
 
-        var playVideoAnimation = () => {
-          // 检查是否扫描完
-          animationFrame = requestAnimationFrame(repeatTakeFrame)
-        }
+		.rotate-circle .rotate-left-img {
+			width: 6px;
+			height: 17px;
+			position: relative;
+			transform: scaleY(-1) rotateZ(-45deg);
+			left: 12px;
+			top: 5px;
+			-moz-user-select: none;
+			/*火狐*/
+			-webkit-user-select: none;
+			/*webkit浏览器*/
+			-ms-user-select: none;
+			user-select: none;
+			vertical-align: baseline;
+		}
 
-        var handler = stream => {
-          var target = videoDom
+		.rotate-circle .rotate-right-img {
+			width: 6px;
+			height: 17px;
+			position: relative;
+			transform: rotate(135deg);
+			left: 12px;
+			top: 5px;
+			-moz-user-select: none;
+			/*火狐*/
+			-webkit-user-select: none;
+			/*webkit浏览器*/
+			-ms-user-select: none;
+			user-select: none;
+			vertical-align: baseline;
+		}
 
-          if (target.srcObject !== undefined) {
-            target.srcObject = stream
-          } else if (window.URL.createObjectURL) {
-            target.src = window.URL.createObjectURL(stream)
-          } else if (window.webkitURL) {
-            target.src = window.webkitURL.createObjectURL(stream)
-          } else {
-            target.src = stream
-          }
-          target.Inline = true
-          var videoPromise = target.play()
-          // console.log('请将身份证人像对准扫描框')
-          videoPromise.then(playVideoAnimation())
-        }
+		.rotate-circle .rotate-top-img {
+			width: 8px;
+			height: 4px;
+			position: relative;
+			transform: rotate(-45deg);
+			left: 10px;
+			top: -1px;
+			-moz-user-select: none;
+			/*火狐*/
+			-webkit-user-select: none;
+			/*webkit浏览器*/
+			-ms-user-select: none;
+			user-select: none;
+			vertical-align: baseline;
+		}
 
-        var openCamera = list => {
-          if (list.length === 0) {
-            return
-          }
-          // 倒序调用摄像头 主摄在最后一个
-          var { deviceId } = list.pop() || {}
+		.rotate-circle .rotate-bottom-img {
+			width: 8px;
+			height: 4px;
+			position: relative;
+			transform: rotate(135deg);
+			left: 13px;
+			top: 2px;
+			-moz-user-select: none;
+			/*火狐*/
+			-webkit-user-select: none;
+			/*webkit浏览器*/
+			-ms-user-select: none;
+			user-select: none;
+			vertical-align: baseline;
+		}
 
-          navigator.mediaDevices
-            .getUserMedia(scanConfig(deviceId))
-            .catch(e => {
-              console.log('e', e)
+		.rotate-circle .unclickable-rotate-bottom .rotate-bottom-img {
+			opacity: 0.3;
+		}
 
-              if (list.length === 0) {
-                console.log('调用摄像头失败')
-                return
-              }
-              openCamera(list)
-            })
-            .then(stream => {
-              handler(stream)
-            })
-        }
-        /**
-         * @description 获取设备后置摄像头列表，并调用持续拍摄
-         */
-        var getDeviceListScan = () => {
-          navigator.mediaDevices.enumerateDevices().then(res => {
-            var deviceList = []
-            res.map(item => {
-              if (
-                item.deviceId &&
-                item.kind === 'videoinput' &&
-                item.label.indexOf('front') === -1 &&
-                item.label.indexOf('前置') === -1
-              ) {
-                deviceList.push({
-                  deviceId: item.deviceId,
-                  label: item.label
-                })
-              }
-            })
-            console.log('deviceList', deviceList)
+		.rotate-circle .unclickable-rotate-top .rotate-top-img {
+			opacity: 0.3;
+		}
 
-            openCamera(deviceList)
-          })
-        }
-        // 释放视频流
-        var stopStream = stream => {
-          if (stream) {
-            stream.getTracks().forEach(function (track) {
-              track.stop()
-            })
-          }
-        }
+		.rotate-circle .unclickable-rotate-left .rotate-left-img {
+			opacity: 0.3;
+		}
 
-        if (navigator.mediaDevices.getUserMedia) {
-          if (!navigator.mediaDevices && !navigator.mediaDevices.getUserMedia) {
-            console.log('调用摄像头失败')
-            return
-          }
+		.rotate-circle .unclickable-rotate-right .rotate-right-img {
+			opacity: 0.3;
+		}
 
-          // 第一次申请权限获取设备列表信息
-          navigator.mediaDevices
-            .getUserMedia({
-              video: {
-                facingMode: 'environment'
-              },
-              audio: false
-            })
-            .then(stream => {
-              getDeviceListScan()
-              stopStream(stream)
-            })
-        } else {
-          alert('不支持访问用户媒体')
-        }
-        var viewportWidth = window.innerWidth
+		.rotate-circle .clickable-rotate-left:hover {
+			background: #f2f4f8;
+		}
 
-        function cutImg(nodeParam, points, canvasDom) {
-          return new Promise((resolve, reject) => {
-            try {
-              // 获取 图片/视频高度和宽度，需要和视口比例做匹配，canvas绘制时根据 图片/视频 的原高和宽进行裁剪
-              var originWidth = nodeParam.naturalWidth || nodeParam.videoWidth
-              var originHeight =
-                nodeParam.naturalHeight || nodeParam.videoHeight
+		.rotate-circle .clickable-rotate-right:hover {
+			background: #f2f4f8;
+		}
 
-              var { startX = 0, startY = 0 } = points || {}
+		.rotate-circle .clickable-rotate-bottom:hover {
+			background: #f2f4f8;
+		}
 
-              let context = canvasDom.getContext('2d')
-              // 裁剪后的高度，身份证宽高比1.58，上下识别区域多30%
-              var outputHeight = originWidth / (1.58 * 0.7)
-              canvasDom.width = originWidth
-              canvasDom.height = outputHeight
-              console.log(canvasDom.width, canvasDom.height)
-              videoDom.setAttribute('crossOrigin', 'anonymous')
+		.rotate-circle .clickable-rotate-top:hover {
+			background: #f2f4f8;
+		}
 
-              context.drawImage(
-                document.querySelector('#video'),
-                parseInt(startX),
-                parseInt(startY),
-                parseInt(originWidth),
-                parseInt(outputHeight),
-                0,
-                0,
-                parseInt(originWidth),
-                parseInt(outputHeight)
-              )
-              // 将裁剪后的图片转换为文件流
-              // try {
-              // canvasDom.toBlob(function (blob) {
-              //   console.log('blob', blob)
+		.rotate-circle .clickable-rotate-left:active {
+			background: #e7eaef;
+		}
 
-              //   context = null
-              //   const file = new File([blob], 'xxx.jpg', { type: 'image/png' })
-              //   resolve(file)
-              // }, 'image/png')
-              // } catch (error) {
-              //   console.log('error', error);
-              // }
-              const newUrl = canvasDom.toDataURL()
-              document.querySelector('#img').src = newUrl
-              resolve(newUrl)
-            } catch (error) {
-              reject()
-              console.log('裁剪图片错误', error)
-            }
-          })
-        }
-      }
-    </script>
-  </body>
+		.rotate-circle .clickable-rotate-right:active {
+			background: #e7eaef;
+		}
+
+		.rotate-circle .clickable-rotate-top:active {
+			background: #e7eaef;
+		}
+
+		.rotate-circle .clickable-rotate-bottom:active {
+			background: #e7eaef;
+		}
+	</style>
+	<style type="text/css">
+		.floor-control {
+			font-size: 15px;
+			color: #646464;
+			height: 180px;
+			width: 38px;
+			background: rgba(255, 255, 255, 1);
+			position: relative;
+			bottom: 83px !important;
+			margin-left: 31px;
+			margin-right: 30px;
+			border-radius: 40px;
+			webkit-user-select: none;
+			ms-user-select: none;
+			moz-user-select: none;
+			apple-user-select: none;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+			z-index: 10;
+		}
+
+		.floor-control:after {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 200%;
+			height: 200%;
+			transform: scale(0.5);
+			transform-origin: left top;
+			border-radius: 40px;
+			z-index: 1000000;
+			box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.12);
+		}
+
+		.floor-control ul {
+			padding-inline-start: 0;
+			padding-inline-end: 0;
+			margin-block-start: 0;
+			margin-block-end: 0;
+		}
+
+		.floor-control .arr-top {
+			width: 38px;
+			position: absolute;
+			z-index: 100;
+			top: -2px;
+		}
+
+		.floor-control .arr-bottom {
+			width: 38px;
+			position: absolute;
+			z-index: 100;
+			bottom: -2px;
+		}
+
+		.floor-control .floor-control-wrapper {
+			overflow: hidden;
+			height: 160px;
+			width: 100%;
+			position: absolute;
+			top: 10px;
+		}
+
+		.floor-control .floor-control-wrapper .floor-control-list {
+			font-size: 12px;
+			list-style-type: none;
+			margin: 0;
+		}
+
+		.floor-control .floor-control-wrapper .floor-control-list .floor-control-item {
+			position: relative;
+			display: block;
+			text-align: center;
+			text-decoration: none;
+			width: 38px;
+			height: 40px;
+			line-height: 40px;
+			transition: color 0.3s ease-in;
+		}
+
+		.floor-control .floor-control-wrapper .floor-control-list .floor-control-item:after {
+			content: '';
+			position: absolute;
+			width: 26px;
+			height: 26px;
+			border-radius: 30px;
+			z-index: -10;
+			pointer-events: none;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			margin: auto;
+			opacity: 0;
+			transition: opacity 0.2s ease-out;
+			background-color: #4875fd;
+		}
+
+		.floor-control .floor-control-wrapper .floor-control-list .selected-item {
+			color: #fff !important;
+			opacity: 1 !important;
+		}
+
+		.floor-control .floor-control-wrapper .floor-control-list .selected-item:after {
+			opacity: 1;
+		}
+
+		.floor-control .floor-control-wrapper.freezing .floor-control-list .floor-control-item {
+			color: #4d4d4d;
+			opacity: 0.4;
+		}
+
+		/* floor-control */
+		.floor-control-moveup {
+			bottom: 83px !important;
+		}
+	</style>
+	<script type="text/javascript"
+		src="https://apis.map.qq.com/tools/geolocation/min?key=XT4BZ-NX7L4-YCTUT-XKHRE-IPNRH-U3BF4&amp;referer=myapp"></script>
+	<!-- <script type="text/javascript" src="/url.js"></script> -->
+	<style>
+		html,
+		body {
+			margin: 0;
+			padding: 0;
+			width: 100vw;
+			height: 100%;
+		}
+
+		body {
+			position: fixed;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+		}
+
+		.pad {
+			/* height: 360px; */
+			/* background-color: aqua; */
+			position: absolute;
+			transition: all .3s ease-out;
+			width: 100vw;
+			z-index: 9999;
+		}
+
+		.pad-list {
+			max-height: 93vh;
+			bottom: 0;
+		}
+
+		nav {
+			width: 100%;
+			overflow-x: scroll;
+			height: 40px;
+		}
+
+		nav::-webkit-scrollbar {
+			width: 0;
+			height: 0;
+		}
+
+		.nav-item {
+			width: 530px;
+		}
+
+		.nav-item div {
+			height: 20px;
+			display: inline-block;
+			margin: 10px 20px;
+		}
+
+		.nav-item div span {
+			font-size: 14px;
+			position: relative;
+		}
+
+		.active {
+			color: #69a669;
+		}
+
+		.active:after {
+			position: absolute;
+			content: '';
+			width: 30px;
+			height: 2px;
+			background: #b5e7b5;
+			bottom: -3px;
+			left: 50%;
+			transform: translate(-50%, 0)
+		}
+
+		.img-nav {
+			width: 46px;
+			height: 46px;
+			border-radius: 46px;
+		}
+
+		.info_card {
+			position: absolute;
+			width: 46px;
+			height: 46px;
+			border-radius: 46px;
+			background-color: #c7c9c8;
+			border: 2px solid #ffffff;
+		}
+
+		.btn-switch-con {
+			display: none;
+			position: fixed;
+			z-index: 5000;
+			border-radius: 2px;
+			border: 1px solid #d8d8d8;
+			right: 10px;
+			top: 50px;
+			font-size: 14px;
+		}
+
+		.btn-switch {
+			float: left;
+			height: 20px;
+			line-height: 20px;
+			text-align: center;
+			width: 40px;
+			background-color: #FFF;
+			cursor: pointer;
+		}
+
+		.btn-switch[checked=true] {
+			background-color: #48b8e2;
+		}
+
+		.circle {
+			z-index: 5000;
+			position: fixed;
+			left: 15px;
+			bottom: 160px;
+			background-color: #fff;
+			width: 35px;
+			height: 35px;
+			border-radius: 50%;
+			border: 1px solid #fff;
+			box-shadow: 0 0 2px #ccc;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.circle img {
+			width: 20px;
+			height: 20px;
+		}
+
+		#container-center {
+			width: 100%;
+			height: 100%;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			position: absolute;
+			z-index: 9999;
+		}
+
+		.spot-name {
+			width: 90%;
+			border-radius: 10px;
+			/* border: 1px solid #ccc; */
+			box-shadow: 0 0 2px #ccc;
+			background-color: #ffffff;
+			margin: 0 auto;
+			overflow: hidden;
+			position: relative;
+		}
+
+		.close_img {
+			width: 20px;
+			height: 20px;
+			position: absolute;
+			right: 10px;
+			top: 6px;
+		}
+
+		.image {
+			display: flex;
+			padding: 10px;
+			align-items: center;
+			height: 50px;
+		}
+
+		.image img {
+			width: 45px;
+			height: 45px;
+			border-radius: 45px;
+			background-color: #c7c9c8;
+			border: 1px solid #ffffff;
+			margin: 0 5px;
+		}
+
+		.image,
+		p {
+			padding: 5px 0;
+			margin: 0;
+		}
+
+		.navigation {
+			height: 35px;
+			background-color: #ddd;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.navigation .go_img {
+			width: 14px;
+			height: 14px;
+			border-radius: 20px;
+			background-color: #4de2c4;
+			padding: 3px;
+			margin-right: 10px;
+		}
+
+		.navigation span {
+			font-size: 12px;
+		}
+
+		.spot-con {
+			width: 90%;
+			box-sizing: border-box;
+			border-radius: 10px;
+			/* border: 1px solid #ccc; */
+			box-shadow: 0 0 2px #ccc;
+			background-color: #ffffff;
+			margin: 0 auto;
+			margin-top: 10px;
+			overflow: hidden;
+			padding: 10px 15px 0;
+		}
+
+		.spot-con h3 {
+			margin: 0;
+			font-size: 15px;
+		}
+
+		#spot-con {
+			line-height: 22px;
+			min-height: 100px;
+		}
+
+		.spot-con p {
+			font-size: 14px;
+		}
+
+		.fuwu {
+			margin: 0;
+			margin-bottom: 15px;
+			text-align: center;
+			font-size: 10px;
+			color: #d8d8d8;
+		}
+
+		.spot-list {
+			width: 90%;
+			border-radius: 10px;
+			box-shadow: 0 0 2px #ccc;
+			background-color: #ffffff;
+			margin: 0 auto;
+			margin-top: 10px;
+			overflow: hidden;
+			max-height: calc(93vh - 120px);
+		}
+
+		.spot-list-con {
+			height: 36px;
+			padding: 15px 18px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.spot-list-con-name {
+			display: flex;
+			align-items: center;
+		}
+
+		.spot-list-con-name img {
+			width: 35px;
+			height: 35px;
+			border-radius: 5px;
+			margin-right: 5px;
+			object-fit: cover;
+		}
+
+		.spot-list-con-go {
+			width: 18px;
+			height: 18px;
+			padding: 4px;
+			border-radius: 22px;
+			background-color: #ddd;
+		}
+
+		.spot-list-info {
+			height: 40px;
+			/* background-color: #ddd; */
+		}
+
+		.address-time {
+			font-size: 6px;
+			color: #777;
+			margin-left: 15px;
+		}
+
+		.time {
+			display: flex;
+			align-items: center;
+			margin-bottom: 5px;
+		}
+
+		.time span {
+			height: 13px;
+			line-height: 13px;
+			font-size: 13px;
+		}
+
+		.time img {
+			width: 13px;
+			height: 13px;
+			margin-right: 5px;
+		}
+
+		.spot-image {
+			margin-left: 5px;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="pad_list" class="pad pad-list" style="display: block; bottom: -534px;">
+		<div class="spot-name" id="spot-list-name">
+			<div class="image">
+				<img src="./tileMap/icons/tianRenShanShui.jpg">
+				<span id="spot-list-name">天人山水</span>
+			</div>
+			<div class="spot-list-info">
+				<div class="address-time">
+					<div class="time">
+						<img src="./tileMap/icons/time.png" alt="">
+						<span> 8: 00 — 19: 00 </span>
+					</div>
+					<div class="time">
+						<img src="./tileMap/icons/address.png" alt="">
+						<span> 广州市从化区太平镇 </span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="spot-list" id="spot-list" style="overflow-y: hidden;">
+			<div class="spot-list-cons" id="spot-list-cons"></div>
+			<p class="fuwu">工行软件中心提供技术支持</p>
+		</div>
+	</div>
+	<div id="pad" class="pad" style="display:none;">
+		<div class="spot-name">
+			<div class="image">
+				<img id="spot-image" class="spot-image" src="./tileMap/icons/tianRenShanShui.jpg"
+					onerror="this.src='./tileMap/icons/tianRenShanShui.jpg'">
+				<div>
+					<span id="spot-name">天人山水</span>
+					<p id="spot-address">广州市从化区太平镇</p>
+				</div>
+			</div>
+			<div class="navigation" onclick="getCurLocation()">
+				<img src="./tileMap/icons/go_img.png" class="go_img" alt="">
+				<span>导航去这里</span>
+			</div>
+			<img src="./tileMap/icons/close_img.png" class="close_img" onclick="closePad()">
+		</div>
+		<div class="spot-con">
+			<h3>景点介绍</h3>
+			<p id="spot-con">
+				此景点暂时没有相关景点介绍。<br>
+			</p>
+			<p class="fuwu">工行软件中心提供技术支持</p>
+		</div>
+	</div>
+
+	<nav class="nav">
+		<div class="nav-item">
+			<div><span data-cont="scenery" class="active">建筑·园林</span></div>
+			<div><span data-cont="service">艺术·装置</span></div>
+			<div><span data-cont="hotel">森系·酒店</span></div>
+			<div><span data-cont="parking">美食·购物</span></div>
+			<div><span data-cont="playing">游玩·娱乐</span></div>
+		</div>
+	</nav>
+	<div id="mapContainer" style="width: 100vw; height: calc(-40px + 100vh); "></div>
+	<div class="circle" onclick="myLocation()"><img src="./tileMap/icons/dingwei.png"></div>
+	<div id="switchBtn" class="btn-switch-con">
+		<div class="btn-switch" checked="true">地图</div>
+		<div class="btn-switch" checked="false">卫星</div>
+	</div>
+	<script>
+
+		var noOffset = true
+		var curId = ''
+		function tabs(key) {
+			var navs = document.querySelectorAll('nav span');
+			//遍历给导航绑定样式，并且添加样式
+			for (var i = 0; i < navs.length; i++) {
+				if (key == i) {
+					navs[i].classList.add('active');
+					//拿到Id
+					var secId = navs[i].dataset['cont'];
+					//获取对应标签
+					// console.log(secId)
+				}
+				//绑定点击事件
+				navs[i].onclick = function () {
+					var myId = this.dataset['cont'];
+					if (curId === myId) {
+						return
+					}
+					curId = myId
+					var currentNav = document.querySelector('.active');
+					updateSpotListCon(defMarkers1[myId])
+					this.classList.add('active');
+					currentNav.classList.remove('active');
+
+					infoWindow.close()
+					marker.setGeometries([])
+					label.setGeometries([])
+
+					marker.updateGeometries([
+						...getGeos(defMarkers1[myId]).map(item => {
+							return Object.assign({}, item, {
+								id: `marker-${item.id}`,
+								'styleId': myId,
+								content: '',
+								position: new TMap.LatLng(...item.position),
+							})
+						})
+					])
+					label.updateGeometries([
+						...getGeos(defMarkers1[myId]).map(item => {
+							return Object.assign({}, item, {
+								id: `label-${item.id}`,
+								'styleId': 'label', //样式id
+								position: new TMap.LatLng(...item.position),
+							})
+						})
+					])
+				}
+			}
+		}
+		tabs(0);
+		var key = 'XT4BZ-NX7L4-YCTUT-XKHRE-IPNRH-U3BF4'
+		//绑定地图切换事件
+		var btns = document.getElementsByClassName('btn-switch');
+		btns[0].setAttribute("checked", "true"); //默认首次展示卫星地图
+
+		for (var i = 0; i < btns.length; i++) {
+			btns[i].onclick = function () {
+				//初始化数据
+				this.parentNode.children[0].setAttribute("checked", "false");
+				this.parentNode.children[1].setAttribute("checked", "false");
+				imageTileLayer1.setVisible(false);
+				imageTileLayer2.setVisible(false);
+				if (this.innerHTML == '地图') {
+					imageTileLayer1.setVisible(true);
+				} else {
+					imageTileLayer2.setVisible(true);
+				}
+				this.setAttribute("checked", "true");
+			}
+		}
+
+
+		// 景区标点数据字段
+		var scenery = [
+			{
+				"title": "陶然墟",
+				"image": "陶然墟",
+				"position": [
+					23.435583,
+					113.585868
+				],
+				"address": "广东省广州市从化区太平红石沙溪街"
+			},
+			{
+				"title": "西西农场",
+				"image": "西西农场",
+				"position": [
+					23.435246,
+					113.5861 // 113.58738
+				],
+				"address": "广东省广州市从化区太平红石沙溪街"
+			},
+			{
+				"title": "游客中心",
+				"image": "游客中心",
+				"position": [
+					23.434719,
+					113.587661
+				],
+				"address": "广东省广州市从化区太平红石沙溪街"
+			},
+			{
+				"title": "天人山水果园",
+				"image": "果园",
+				"position": [
+					23.43257,
+					113.588478
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+			{
+				"title": "日夕廊",
+				"image": "日夕廊",
+				"position": [
+					23.4366, // 23.436552
+					113.58989 // 113.589881
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+			{
+				"title": "古树中叶紫薇",
+				"image": "古树中叶紫薇",
+				"position": [
+					23.435934,
+					113.590354
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+			{
+				"title": "茶梅谷",
+				"image": "茶梅谷",
+				"position": [
+					23.43574,
+					113.59015
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+			{
+				"title": "清溪谷",
+				"image": "清溪谷",
+				"position": [
+					23.43415,
+					113.590613
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+			{
+				"title": "沈周园",
+				"image": "沈周园",
+				"position": [
+					23.435202,
+					113.590998
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+			{
+				"title": "亲水栈道",
+				"image": "亲水栈道",
+				"position": [
+					23.435183,
+					113.59169
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "龙门飞渡桥",
+				"image": "龙门飞渡桥",
+				"position": [
+					23.434409,
+					113.5942 // 113.593911
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+			{
+				"title": "伊吕波枫树",
+				"image": "伊吕波枫",
+				"position": [
+					23.435133,
+					113.595616
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+			{
+				"title": "登科桥",
+				"image": "登科桥",
+				"position": [
+					23.434968,
+					113.595722
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+			{
+				"title": "靖节苑",
+				"image": "靖节苑",
+				"position": [
+					23.434923, // 23.434833
+					113.597669 // 113.597469
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "心远居",
+				"image": "心远居",
+				"position": [
+					23.434222,
+					113.598772
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "花埭湾",
+				"image": "花埭湾",
+				"position": [
+					23.434978,
+					113.598328
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "相与堂",
+				"image": "相与堂",
+				"position": [
+					23.434211,
+					113.599995
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "香水月季王",
+				"image": "香水月季王",
+				"position": [
+					23.434045,
+					113.59994
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "忘言谷",
+				"image": "忘言谷",
+				"position": [
+					23.434121,
+					113.601019
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "空山艺术馆",
+				"image": "空山艺术馆",
+				"position": [
+					23.433912,
+					113.601073
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "令姿亭",
+				"image": "令姿亭",
+				"position": [
+					23.434023,
+					113.602119
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "定风波亭",
+				"image": "定风波亭",
+				"position": [
+					23.433925,
+					113.602274
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "令狐亭",
+				"image": "令狐亭",
+				"position": [
+					23.436041,
+					113.601711
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "千红林",
+				"image": "千红林",
+				"position": [
+					23.435586,
+					113.600026
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "弥勒佛木棉",
+				"image": "弥勒佛木棉",
+				"position": [
+					23.434909,
+					113.599716
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "福地坛",
+				"image": "福地坛",
+				"position": [
+					23.435462,
+					113.599892
+				],
+				"address": "广东省广州市从化区"
+			}
+		]
+
+		var service = [
+			{
+				"title": "原住民",
+				"image": "原住民",
+				"position": [
+					23.437498, // 23.437358
+					113.58919 // 113.589087
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+			{
+				"title": "逆流",
+				"image": "逆流",
+				"position": [
+					23.436068,
+					113.59016
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+			{
+				"title": "西方艺术史长廊",
+				"image": "西方艺术史长廊",
+				"position": [
+					23.435103,
+					113.591629
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+			{
+				"title": "六棱柱",
+				"image": "六棱柱",
+				"position": [
+					23.434369,
+					113.59243
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+			{
+				"title": "流水花池",
+				"image": "流水花池",
+				"position": [
+					23.43361,
+					113.598815
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "照妖镜",
+				"image": "照妖镜",
+				"position": [
+					23.434901,
+					113.599526
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "山海经",
+				"image": "山海经",
+				"position": [
+					23.435464,
+					113.600055
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "大音",
+				"image": "大音",
+				"position": [
+					23.435553,
+					113.599339
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "伊萨卡之门",
+				"image": "伊萨卡之门",
+				"position": [
+					23.435072,
+					113.601974
+				],
+				"address": "广东省广州市从化区"
+			}
+		]
+
+		var hotel = [
+			{
+				"title": "日夕苑",
+				"image": "日夕苑",
+				"position": [
+					23.437505,
+					113.5889
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+			{
+				"title": "启美居",
+				"image": "启美居",
+				"position": [
+					23.433419,
+					113.599152
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "真意野奢帐篷",
+				"image": "真意野奢帐篷",
+				"position": [
+					23.432238,
+					113.601924
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "房车营地",
+				"image": "房车营地",
+				"position": [
+					23.437089,
+					113.60276
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "星空轻奢帐篷",
+				"image": "星空轻奢帐篷",
+				"position": [
+					23.43405,
+					113.596372
+				],
+				"address": "广东省广州市从化区"
+			}
+		]
+		var parking = [
+			{
+				"title": "诺诺餐车",
+				"image": "诺诺餐车",
+				"position": [
+					23.435153,
+					113.588923
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+			{
+				"title": "清·集市",
+				"image": "清·集市",
+				"position": [
+					23.435372,
+					113.589633
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+			{
+				"title": "荔枝岛",
+				"image": "荔枝岛",
+				"position": [
+					23.435235, // 23.435035
+					113.597568
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "琴瑟茶室",
+				"image": "琴瑟茶室",
+				"position": [
+					23.434726,
+					113.597505
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "玫瑰之恋",
+				"image": "玫瑰之恋",
+				"position": [
+					23.433499,
+					113.599678
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "乐佸餐厅",
+				"image": "乐佸餐厅",
+				"position": [
+					23.435381,
+					113.59919 // 113.59891
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "真·意轩",
+				"image": "真意轩",
+				"position": [
+					23.433694,
+					113.600728
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "流霞酒舍",
+				"image": "流霞酒舍",
+				"position": [
+					23.435703,
+					113.600935
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "西西乐烤吧",
+				"image": "西西乐烤吧",
+				"position": [
+					23.434992,
+					113.585482
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+		]
+		var playing = [
+			{
+				"title": "自然研学基地（研学教室）",
+				"image": "研学基地",
+				"position": [
+					23.43605,
+					113.587213
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+			{
+				"title": "诺诺庄园",
+				"image": "诺诺庄园",
+				"position": [
+					23.435008,
+					113.588732
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+			{
+				"title": "诺诺嘉年华",
+				"image": "诺诺嘉年华",
+				"position": [
+					23.435023,
+					113.588657
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+			{
+				"title": "童心乐园",
+				"image": "童心乐园",
+				"position": [
+					23.435519,
+					113.589658
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+			{
+				"title": "水上巴士·轻飏1",
+				"image": "水上巴士·轻飏1",
+				"position": [
+					23.43873,
+					113.58911
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+			{
+				"title": "六六旋转木马",
+				"image": "六六旋转木马",
+				"position": [
+					23.435239,
+					113.60045
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "裸心泳池",
+				"image": "裸心泳池",
+				"position": [
+					23.433713,
+					113.598062
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "徒步径",
+				"image": "徒步径",
+				"position": [
+					23.432091,
+					113.590815
+				],
+				"address": "广东省广州市从化区上清幽街"
+			},
+			{
+				"title": "沙溪航空运动基地",
+				"image": "沙溪航空运动基地",
+				"position": [
+					23.442647,
+					113.591427
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "东驿站",
+				"image": "东驿站",
+				"position": [
+					23.435542,
+					113.589066
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "西驿站",
+				"image": "西驿站",
+				"position": [
+					23.435263,
+					113.5858
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "陌上小院",
+				"image": "陌上小院",
+				"position": [
+					23.435157,
+					113.586192
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "草地嘉年华",
+				"image": "草地嘉年华",
+				"position": [
+					23.435157,
+					113.586192
+				],
+				"address": "广东省广州市从化区"
+			},
+			{
+				"title": "轻水乐园",
+				"image": "轻水乐园",
+				"position": [
+					23.434659,
+					113.58475
+				],
+				"address": "广东省广州市从化区太平红石沙溪街"
+			},
+			{
+				"title": "手摇船租赁点",
+				"image": "手摇船租赁点",
+				"position": [
+					23.434813,
+					113.585377
+				],
+				"address": "广东省广州市从化区"
+			}
+		]
+
+		var sceneryIntro = {
+			"陶然墟": "陶然墟以传统瓦片为顶，质朴、简约、大气，曲线优美，力量感充盈，是一处功能多样、盛产欢乐的创意空间，是团体客主入口、特殊节庆的汇集点，可举办不同主题的大型活动，在保留自然情趣的艺术田园间展现陶然复陶然之乐。",
+			"竹林小道（靠近游客中心）": "竹道长廊位于园区停车场一侧，游客可从停车场沿着长廊漫步闲谈至游客服务中心，洗去一身旅途的疲惫。竹道四时青翠，山风吹拂，是闲憩和拍照打卡点之一。",
+			"竹林小道（靠近p2停车场）": "竹道长廊位于园区停车场一侧，游客可从停车场沿着长廊漫步闲谈至游客服务中心，洗去一身旅途的疲惫。竹道四时青翠，山风吹拂，是闲憩和拍照打卡点之一。",
+			"西西农场": "西西农场是一处盛产欢乐、举办露营派对、休闲观光的户外空间。这里汇集了众多游玩项目，如西西小火车、西西乐烤吧、轻水乐园、草地嘉年华等，大人、小孩都可以找到属于自己的游玩乐趣。",
+			"游客中心": "户庭是天人山水大地艺术园的游客服务中心，一个与艺术农田无缝连接的半室外景观大堂，设有智慧取票区、礼品区、出入大厅等。户庭是一颗破土而出的钻石，迎接远道而归的游子。",
+			"公约厅": "位于游客中心闸口右侧，采用360度的环幕影屏，在这里播放天人山水动漫IP《成长这东西》及入园公约，把欢乐和童趣、文明和规则带给游客。",
+			"天人山水果园": "位于停车场后山，园中种植了番石榴、葡萄、桑葚、香水柠檬、嘉宝果等纯天然无公害水果。目前仅对大型团队开放。",
+			"日夕廊": "日夕廊是景区沙溪水库和艺术农田的最佳视野观景点，两侧设有波浪曲线型观景休憩椅，游客们可以在悠闲地欣赏北回归线上的浩淼烟波、连绵群山及艺术农田，也可以欣赏浪漫的日出或日落。",
+			"古树中叶紫薇": "中叶紫薇林位于日夕廊尽头，由树龄古老的中叶紫薇组成的小花园。紫薇花生长在树枝顶部，一般6月进入花期，花期可持续3个月以上，花期期间花色鲜艳，因而又被誉为“百日红”、“满堂红”。在此可举办小型音乐沙龙和诗歌朗诵活动等。",
+			"茶梅谷": "茶梅谷位于中叶紫薇林下方，沿坡植有几百株茶梅，沿着空中廊梯可尽览茶梅谷美景。茶梅谷最佳观赏期在每年的十二月至次年五月，游客们来此可领略到“色香声味触法”的无限深意。",
+			"清溪谷": "清溪谷中负氧离子含量达7786/㎡，是天人山水大地艺术园自然氧吧之一，在岩壑、飞瀑、溪流、古树、蕉林等自然景观中设有徒步小径，是静心闲走和户外徒步、定向越野等户外活动的最佳地点之一。",
+			"清溪瀑布": "位于清溪谷最深处。每年七八月间，瀑布活力四射，与周围的岩壁、树木、蕉叶、草地、溪流、浅潭、“思过崖”和斑驳的阳光，构成一幅层次分明、色彩丰富的中国画。游人到此，可以听到瀑布的轰鸣、感受到空中溅起的飞沫和沁人心脾的山风，内心喜悦无比。",
+			"沈周园": "沈周园的造园立意参考了明代山水画家沈周的《四松图》的构成及山水意境，顺山势，植古松，移花石，岩岩然，耸耸然，得古人山水意趣。临山登高远眺，一步一景，尽览天人山水大地艺术园门户区美景。",
+			"亲水栈道": "亲水栈道是景区沙溪水库的观景长廊，全长1950米，贯穿整个园区后区。临湖沿栈道种植了一大片的落羽杉，游客们可以一边悠闲漫步，一边欣赏湖水的波光粼粼和金黄色的落羽杉树群以及远山近黛。",
+			"龙门飞渡桥": "龙门飞渡架设在鲤鱼跃龙门风景区内，桥底设十孔，与亲水栈道相连结，并设有码头平台，是园区绝佳的亲水平台。",
+			"伊吕波枫树": "伊吕波枫树位于龙门飞渡桥下，原种植于日本德川幕府名将——松田右卫门将军庭院。枫叶的颜色随四季气候变换，春天抽芽、夏季成荫、秋季染黄、冬天凋零，止留龙干虬枝，风姿绰约挺立在天人山水湖边北岸。在其下赏湖，一次邂逅就是一场浪漫。",
+			"登科桥": "登科桥是花埭湾湿地花海的入口景观，大地艺术花园前后区的分界线，以570根重达38万斤的钢条高空焊接而成，取大地之“竹”为原材料，8040根竹子覆盖编织塑造飞跃龙门的鲤鱼。现代艺术与传统文化结合，竹片造形架构出高低流畅的线条感，是游客拍照打卡的“网红点”之一。",
+			"靖节苑": "靖节苑是天人山水中式庭院，占地4606平方米，内设琴瑟茶室、东皋亭和苔藓园以及曲水流觞等人文空间。游客可以在茶室静坐品茗，观景听雨，感受山水诗意，更可以邀请知己好友低吟浅唱、畅叙幽情。",
+			"心远居": "心远居占地2261平方米，以云梯栈道为特色，种植大量奇花异卉，融合欧美花园艺术，依山而上，蜿蜒盘旋，曲径通幽。谷中深处设有一处流水花池，游客可以在空中旋转眺望，聆听流水清音，欣赏四时花色，顿生心旷神怡之感。",
+			"花埭湾": "花埭湾秉承“花埭精神”，是沿着水库漫延的湿地公园，种植有500余种奇花异卉，一年四季不断变幻色彩，是亲子家庭散步游玩和情人最佳拍照打卡的“网红之地”。",
+			"相与堂": "相与堂占地4500平方米，种植了200个多不同品种的玫瑰花，更植有世间罕有的明代香水月季王。以“爱情”为主题，玫瑰古堡、唯美动人的玫瑰花海、英式玫瑰下午茶，配套婚纱摄影、婚庆服务等，为爱情蜜运、婚庆活动人士提供优质的服务。谷中设有教堂式玻璃建筑，可容纳几十人同时参加活动，是天人山水园区举办浪漫婚礼和狂欢派对的推荐地之一。",
+			"香水月季王": "中国月季始出晋代，而这株香水月季，则是世界上迄今发现最古老的一株，距今超过370年的历史，被誉为“明代香水月季王”。原生长在云南深山古村落，后因各种机缘移栽于此，为天人山水的镇园之宝之一。其基部直径达25厘米，并生长有罕见的“树宝”，枝条最长可达数十米，叶大花硕。花盛期密密匝匝达上千朵之繁。主干呈倒写“人”字，与人相遇，与地相接，便成“天”字，可谓天意。",
+			"忘言谷": "忘言谷占地6951平方米，以普罗旺斯风情为主题，培育了原生薰衣草、长穗薰衣草、混种薰衣草等品类的薰衣草花海供游客观赏。花园内设有SPA精油馆和空山艺术馆，可供游客在游玩过程中体验舒适与贴心的服务。",
+			"空山艺术馆": "空山艺术馆是一个隐匿于山间的“洞穴”展览空间，内部空间采用异形曲面以表现洞穴的形态特征，采用木模清水混凝土浇筑，局部开有天窗，引入自然光，适宜举办展览、会议论坛等活动。",
+			"SPA馆": "位于忘言谷中，是薰衣草花海深处的私密会馆，为宾客提供顶级的精油spa服务。“一般祛尘垢，此番洗却灵。神情和气爽，回看万峰青。” Spa馆以“洁、净、精、微”的禅意环境和细致周到的服务，让您在繁杂喧嚣的都市丛林中放松心情深呼吸，沉浸在芳香静谧的环境中，释放身心，享受无忧自在的美妙之旅。",
+			"令姿亭": "令姿亭的设计灵感源于电影《闻香识女人》主角与人共舞的场面。内设有咖啡图书馆。徒步到园区深处，游客可在令姿亭休息调整，沉心阅读，是休闲充电的好去处。",
+			"定风波亭": "定风波亭景观包括万松冈、定风波亭等，参照宋代山水标准进行造园。游客可登高赏景、亭中听雨，炼就如东坡居士一般旷达的精神境界。有苏轼集字《定风波亭》匾额及《定风波·莫听穿林打叶声》书法石刻各一。",
+			"令狐亭": "令狐亭位于千红林花林间，整体设计以不锈钢为主体材料，以绿黄涂料喷绘为主题颜色，展现一刚一柔，演绎仙侠冒险浪漫爱情。亭边植有连理枝林、樱花林，与您共同见证爱情时刻，是情侣拍照打卡点之一。",
+			"千红林": "千红林内植物种类繁多，有古桩桃花、梅花林、山茶园、佛肚木棉、麒麟园，植有油桐树、小叶中叶紫薇、黄花风铃木等，是绝佳的赏花地点。在山谷中设有以十二生肖为原型的旋转木马；在半山上的桃花林中设有适合亲子运动的百步梯，在爬坡的过程中，还能穿越雾影山门，到达山顶的流霞酒铺，饮一杯流霞酒，对漫天流霞风。",
+			"弥勒佛木棉": "弥勒佛木棉又称“生命之树”，俗称“大肚木棉”。原产于南美洲热带至亚热带地区。2021年天人山水引进5株栽培在千红林附近。瓶状的树干是因树木在旱季储存水分而膨胀，其直径可达5米。据传，当地土著是用这种树木里的水养牛，用木材制作日常用品。一棵发育良好的树，里面的水可供四人只用来饮用，半年都用不完。南美洲一些村庄在旱季时，甚至全村人的用水都靠它，因此被称为“生命之树”。据说，那些一直为不能怀上孩子而烦恼的小夫妻，只要来天人山水拜一拜、摸一摸这里的“大肚木棉”，保不准很快就能怀上小宝宝呢。",
+			"福地坛": "福地坛位于千红林山脉半坡，处于山林花海，与山水相通，与自然共呼吸，表达天人山水敬畏自然，实现人与自然和谐共处的愿景，游客可在此静坐冥想，放松身心。上有莫道明《福地坛记》全文石刻。",
+			"吾友": "天人山水吉祥物IP组合，由“红丸”、“丫哟哟”、“福袋奶奶”、“大团”等一群可爱的小精灵组成，它们的使命是为游客奉献欢乐。",
+			"原住民": "原住民是位于大坝上的艺术装置之一，由地球信号小组使用风化荔枝树桩、园区泥土、不锈钢和砂砾制成的夯土墙。荔枝树桩曾埋藏于水库底部村子里达70年之久，记录了这片土地昔日的历史印痕，是一座时间纪念碑，故名“原住民”。装置作品四周种植有一片粉黛乱子草，开花期间迎风摇曳，风情万种，与装置形成一刚一柔的强烈对比，弥漫出融融诗意，是园区热门打卡点之一。",
+			"逆流": "逆流是天人山水大地艺术之一，位于大坝的坝面，由法国现代艺术家Alain Simon设计的名为“银箭”的逆流飞船和草丛波纹组成，象征飞船在时间逆流上穿梭并掀起波澜，向游客传达逆流而上、静逸修心的人生感悟。",
+			"西方艺术史长廊": "西方艺术史长廊全长440米，从西方15000年的艺术史中挑选出属于不同阶段特定时期特定的痕迹，以二度创作的方式制成18面微型石窟，记录着西方艺术史的演化历程，记录了“美”的时空足迹。游客可顺着入园的路径，一边欣赏艺术作品，一边欣赏湖光山色。",
+			"六棱柱": "六棱柱，又名六方石，是园区主路的悬崖上有用麻绳串起来的护栏，属于阶段岩浆喷发产物，形成时代最早约自晚侏罗世，距今约1亿5000万年。",
+			"流水花池": "位于心远居内。花池由内外两环组成，内环为一个简约时钟，默默守着自己的光阴刻度。外环为落花池，花朵随水流而漂动，漂动的速度就是秒针行进速度，流水代表了光阴流逝，在这里可以尝试解读时间，也可以感受它的流逝。",
+			"照妖镜": "照妖镜在千红林一角，以围棋、卷轴和扇子作为道具。游客从千红林漫步到照妖镜，观棋度己，磨砺本心。",
+			"山海经": "山海经神兽系列雕塑位于千红林山谷间，以镜面材料制作，向游客展示中华神话传说，是千红林最有代表性的艺术作品之一。",
+			"大音": "大音位于千红林山坡最显眼之处，结合错视和当代艺术，以文字“会”为形态，以乐器编钟为设计灵感的音乐互动艺术装置，游客可以随性演奏，给您不期而会的邂逅惊喜。",
+			"伊萨卡之门": "“伊萨卡”一词来源于古希腊神话传奇《荷马史诗》，是千红林仙侠英雄系列艺术装置之一，对游客寄予英雄般的勇气开展人生的冒险旅程。",
+			"日夕苑": "日夕苑位于水库大坝边，是VIP贵宾的休憩点。日夕苑是现代感十足的石雕艺术造型建筑，迎宾大堂饰有阿富汗冰青玉，格调高雅，二层、三层空间私密，具有接待、会议等功能，适宜商务洽谈和朋友私会。",
+			"启美居": "启美居为真意帐篷的高级行政套房，分上下两层，设有套房、禅修室、书画室、茶室、餐厅等。整体采用传统四合院四水归堂格局，同时引入双庭院和全落地玻璃幕墙设计，入眼尽收山林美景。宾客置身其中，宛在山林书屋，品读林泉高致，美不胜收。",
+			"真意野奢帐篷": "位于天人山水园区半山间的“森系野奢栖息空间”，分布在半山的山肩两侧，180度的大面无遮挡落地玻璃，融入大地艺术园落差山景湖景和花林花海，感受“野远随天尽，湖平入眼安。扉连三径曲，窗逼一峰寒”诗情画意。",
+			"房车营地": "营地临山而立，坐落于宁静柔和的湖光山色间，与自然相得益彰，融为一体。房车窗外青山绿水，山花烂漫，鸟语花香。独立的院落、草坪，配套设施齐全，可举办篝火晚会、森林野餐、露天电影等。客房房型分美式星空版、豪华酒店版、新中式版等，配套大床房、双床房、四人房上下铺等，给宾客带来足够宽广的视觉空间和活动空间。",
+			"星空轻奢帐篷": "星空轻奢帐篷是一款主打精致露营的房型，采取了简约的北欧风设计，没有太多繁杂的装饰，以纯白色为主色调，原木色作为点缀。帐篷与营地周边的森林融为一体，与山水风光为伴，与日月星辉相依。拎包即可入住舒适的空调冷气房，更配有独立卫浴，干湿分离的洗手间，给入住客人营造干净、舒适、精致的轻奢环境。",
+			"诺诺餐车": " 诺诺庄园是以“牧趣”为主题设计的现代主义风格乐园，它不仅是景观地标，更是孩子们游玩的大玩具。在游玩的同时，诺诺餐车为小朋友准备特色轻食，如特调脏脏鲜奶茶，三文治雪糕，自制华夫饼等。  ",
+			"清·集市": "集美食集市、客服中心、儿童托管、观光电瓶车候车区等一体的多功能镂空式当代建筑，适合亲子家庭、情侣来此打卡小憩。",
+			"荔枝岛": "荔枝岛是花埭湾中自然伸出的高地，可同时容纳200人左右，适合各种雅集、聚会。在岛上游客可享受午后“清·咖啡”，近看花海与登科桥美景，远眺千红林、令姿亭及半山腰闪烁白光的帐篷酒店，惬意赏心。",
+			"琴瑟茶室": "茶室采取晋宋风格，简洁高雅。在此中沏上一壶好茶，或聆《碧涧流泉》，或读一段上妙文字，透过落地玻璃窗细赏中式庭院之美，便觉是羲皇上人。",
+			"玫瑰之恋": "位于相与堂内。在这里你可以预订真意轩的“玫瑰之恋”下午茶，一边与闺蜜或情侣一起品尝精致的糕点和玫瑰佳茗，一边坐在盛开的月季、玫瑰丛中，欣赏着阳光透过树叶投在英式古堡的斑驳光影，感受着甜润的山风，一切，是那么唯美、浪漫。",
+			"乐佸餐厅": "乐佸餐厅将连绵起伏的山峦为作为设计元素，以简洁的钢结构为主体，外立面采用竹木等自然材料，实现了与自然山林的和谐。餐厅可同时容纳300人就餐。宾客们可尽情体验岭南茶居文化和本土时令食材烹饪的美食，真正体验“粤菜吃出诗意来”。",
+			"真·意轩": "由具有米其林餐厅资格的西班牙皇家美食协会会员樊志源先生担任行政总厨，采用本地特有的富硒食材进行烹饪。室内270度全落地玻璃大景观幕墙，带来视觉和味蕾的双重享受。",
+			"流霞酒舍": "位于千红林山崖边上，游客可以远眺登科桥，俯瞰花埭湾，近赏古梅林。在这里一览众山小，饮一杯流霞酒，对漫天流霞风。",
+			"西西乐烤吧": "位于西西农场西面荔枝林下，环境优美，是亲子家庭、情侣们欢聚、休闲、放松理想空间，可提供各种烧烤、零食、饮料、小吃、水果等服务。",
+			"诺诺奇妙屋": "位于西西农场西部，毗邻陶然墟。里面有各种各样的诺诺文创产品，形象活泼可爱，价格超值，快将诺诺请回家吧——",
+			"南粤古驿道": "南粤古驿道最早起源于秦汉，是中原人入粤以及岭南商贸活动的主要路径，也是海上丝绸之路向内陆延伸的重要通道，更是广东历史发展的重要缩影和文化脉络的延续。自2016年，广东开展南粤古驿道保护修复和活化利用工作。南粤古驿道钱岗段中的天人山水大地艺术园，是该示范段上一个重要的景观节点。近几年来，天人山水利用古驿道沿线历史人文和自然资源，打造文化旅游品牌，并围绕古驿道举办大型体育赛事及国家级各大综合公益性体育赛事和活动，吸引广大参赛者、游客超过300万人次来参赛、观光旅游及度假，成为广州市远近闻名的“网红景区”之一，也成为广东乡村文旅振兴的“样本”，切切实实反映出古驿道在保护修复下的“可利用和可到达”性，焕发出勃勃生机，成为助力文旅深度融合、乡村振兴的有益实践。",
+			"微笑秋千": "位于西西农场西面，采用耀眼的橙黄色，设计成孩子们喜爱的趣稚生动的微笑形象，是免费休闲、打卡的好去处。",
+			"芒芒吱": "芒芒吱是天人山水的小精灵之一。聪明自信，高冷腹黑，她不常说话，但一张口便是毒舌吐槽，因此其他精灵都不敢跟芒芒吱说话。其实芒芒吱只是刀子嘴豆腐心，内心十分温柔。她暗恋善良单纯的红丸，因为只有红丸愿意主动和她说话，还送她亲手制作的甜点。芒芒吱购物本是精打细算，却愿意在红丸生日那天送给他最昂贵的生日礼物。两人平时相处喜欢互怼，是一对欢喜冤家。",
+			"自然研学基地（研学教室）": "位于西西农场东北部，靠近木栈道入口处。可为参加研学活动的孩子们提供一个整洁美观的研学空间。主要开放时间：夏令营和冬令营。",
+			"诺诺庄园": "诺诺庄园是以“牧趣”为主题理念设计的现代主义风格儿童乐园，结合儿童的跑、跳、攀、爬、滑、吊、钻等各类运动方式，设有粮仓游玩表演区、越野攀爬区、溪水游玩区等，小朋友们可以在这里举办欢乐派对，尽情玩乐！",
+			"诺诺嘉年华": "位于游客中心入口处。设有沙包砸罐子、圈圈乐、投篮高手等游戏，这些都是孩子们最喜欢挑战的游玩项目，可充分调动孩子们身体的灵活性和反应能力。",
+			"童心乐园": "童心乐园由室内和室外的游玩空间组成，游玩空间的设计充满着幻想、错位视觉、无限形式的交互装置。乐园内设有阅读区、积木区等不同主题板块，聘请专业幼教教师为五岁以下的孩子提供舒适、宽敞、安全的专业托管服务。",
+			"水上巴士·轻飏1": "暂设有“轻飏1号”水上巴士一辆。游客登上“轻飏1号”，可饱览湖光山色，体验陶渊明“舟遥遥以轻飏，风飘飘而吹衣”般的畅爽。登船地点：日夕苑。时间：每半小时开一班船，11:00-12:00、14:00-18:00（平日）、10:00-12:00、14:00-18:00（周末/节假日），价格是48元一次。",
+			"彩虹亭": "位于令姿亭与六六旋转木马之间。候车亭饰以彩虹，般色彩鲜艳夺目，与周边山林形成了强烈的对比。洁白宽敞的棚顶遮阳挡雨，一字型的候车座椅，方便又舒适。候车期间，也是出片的好时机。",
+			"六六旋转木马": "六六旋转木马位于千红林山谷中，天人山水十二种代表花卉一一刻画在十二生肖木马上，载着游客尽情畅玩，发出幸福快乐的祝愿，是亲子和情侣游玩打卡点之一。",
+			"裸心泳池": "裸心泳池位于半山间，毗邻真意真意野奢帐篷，是酒店的配套设施。接待区和淋浴区采用全落地玻璃幕墙，无边泳池区设在环山绿植花海里，因山地形势的变化，泳池各个区域都有不同高差和叠级，池底设有世界顶级水下HIFI音响，给游客带来山景、花景、湖景和水下音响系统四位一体的感官体验。",
+			"徒步径": "起点：清溪谷，终点：二号湾，总长：约六公里。是南粤古驿道遗址和红色秘密交通线展示区，沿途能欣赏到青山、绿树、溪流、瀑布、蕉叶、苔藓等自然景观，富含负氧离子，景致幽深多变，石阶泥土软硬适中，非常适合徒步散心。",
+			"沙溪航空运动基地": "位于水库对岸的天人山水－沙溪航空运动基地，是飞行爱好者的专业飞场。150米长、8米宽的专业硬化机场跑道，干净无遮挡的空域，实时监控的塔台，专业的教练，更有“第一人称视角”的VR眼镜，享受极致的空中竞速快感体验。",
+			"东驿站": "分别位于西西农场的东部和西部，是西西小火车的始发点。西西小火车以天人山水IP形象大使西西作为创意主题，造型独特，可爱有趣，深受小朋友的喜爱。一家大小坐上西西小火车穿行于诗意田园，沐浴垄上微风，乐享蓝天白云，恍如进入童话世界，尽享天伦之乐。",
+			"西驿站": "分别位于西西农场的东部和西部，是西西小火车的始发点。西西小火车以天人山水IP形象大使西西作为创意主题，造型独特，可爱有趣，深受小朋友的喜爱。一家大小坐上西西小火车穿行于诗意田园，沐浴垄上微风，乐享蓝天白云，恍如进入童话世界，尽享天伦之乐。",
+			"陌上小院": "位于西西农场中部。山风协奏，田野唱和。夕阳夜幕下的山谷，欢歌笑语相伴，陌上小院内每周末都有音乐Live、露营、美食，来与家人朋友们开启一场户外之旅。",
+			"草地嘉年华": "位于西西农场中西部。在这片绿莹莹的草地上，可感受到云影和星光，可自由奔跑，可飞盘竞技，可做各种团体游戏，探索和体验自然之美。",
+			"轻水乐园": "位于西西农场西面，由沙滩、水池、动植物以及手摇船、滑梯、水上木板等简易游乐设施构成游玩乐园。孩子们可以在这里尽情戏水、愉快玩耍，释放童真活力。",
+			"手摇船租赁点": "位于轻水乐园旁，孩子们可在这里实现玩水自由，感受清凉夏日时光。售价为25元/次/人，开放时间为：10:00-18:00（平日）、10:00-18:30（周日）"
+		}
+		var defMarkers1 = {
+			scenery, service, hotel, parking, playing
+		}
+		// 地图中心点
+		var center = new TMap.LatLng(23.43346, 113.599184)
+
+		// 当前选中的marker点数据
+		var curGeometry = {}
+		// 初始化地图
+		var map = new TMap.Map('mapContainer', {
+			center,
+			minZoom: 14,
+			zoom: 15,
+			maxZoom: 18,
+			rotation: -90,
+			// pitch: 60,
+			baseMap: {
+				type: 'vector',//satellite卫星地图vector二维地图
+				features: ['base', 'building2d']
+			},//隐藏底图文字（设置显示元素）
+			showControl: false, // 隐藏默认控件
+		})
+		var marker = new TMap.MultiMarker({
+			id: 'marker-layer',
+			map,
+			styles: {
+				scenery: new TMap.MarkerStyle({
+					"width": 18,
+					"height": 18,
+					"anchor": { x: 0, y: 0 },
+					"src": "./tileMap/icons/scenery.png"
+				}),
+				service: new TMap.MarkerStyle({
+					"width": 18,
+					"height": 18,
+					"anchor": { x: 0, y: 0 },
+					"src": "./tileMap/icons/service.png"
+				}),
+				hotel: new TMap.MarkerStyle({
+					"width": 18,
+					"height": 18,
+					"anchor": { x: 0, y: 0 },
+					"src": "./tileMap/icons/hotel.png"
+				}),
+				parking: new TMap.MarkerStyle({
+					"width": 18,
+					"height": 18,
+					"anchor": { x: 0, y: 0 },
+					"src": "./tileMap/icons/parking.png"
+				}),
+				playing: new TMap.MarkerStyle({
+					"width": 18,
+					"height": 18,
+					"anchor": { x: 0, y: 0 },
+					"src": "./tileMap/icons/playing.png"
+				}),
+
+			},
+			geometries: [
+				...getGeos(scenery).map(item => {
+					return Object.assign({}, item, {
+						id: `marker-${item.id}`,
+						"styleId": 'scenery',
+						content: '',
+						position: new TMap.LatLng(...item.position),
+					})
+				})
+				// {
+				//   "id": "marker1",
+				//   "styleId": 'marker',
+				//   "position": new TMap.LatLng(27.8945514, 108.6921378),
+				//   "properties": {
+				//       "title": "marker1"
+				//   }
+				// },
+			],
+		})
+		var label = new TMap.MultiLabel({
+			id: 'label-layer',
+			map: map,
+			styles: {
+				'label': new TMap.LabelStyle({
+					// 'color': '#fff', //颜色属性
+					'color': '#000', //颜色属性
+					'size': 8, //文字大小属性
+					'offset': { x: 7, y: 30 }, //文字偏移属性单位为像素
+					'angle': 0, //文字旋转属性
+					'alignment': 'center', //文字水平对齐属性
+					'verticalAlignment': 'middle', //文字垂直对齐属性
+					'padding': '4px 14px',
+					// 'backgroundColor': 'rgba(132,112,255,0.9)',
+					'backgroundColor': '#ffffff',
+					'borderRadius': 4,
+					'borderWidth': 1,
+					'borderColor': 'rgb(132,112,255)'
+				})
+			},
+			geometries: [
+				...getGeos(scenery).map(item => {
+					return Object.assign({}, item, {
+						id: `label-${item.id}`,
+						'styleId': 'label', //样式id
+						position: new TMap.LatLng(...item.position),
+					})
+				})
+				// {
+				//   'id': 'label', //点图形数据的标志信息
+				//   'styleId': 'label', //样式id
+				//   'position': new TMap.LatLng(27.8945514, 108.6921378),
+				//   'content': '腾讯北京总部', //标注文本
+				//   'properties': { //标注点的属性数据
+				//       'title': 'label'
+				//   }
+				// }
+			]
+		});
+
+		new TMap.DOMOverlay(options);
+
+		// 此处代码后面把景点转id
+		function getGeos(markers) {
+			return markers.map((item, index) => {
+				return {
+					"id": item.title,
+					"styleId": 'marker',
+					"position": item.position,
+					"content": item.title,
+					"properties": {
+						"title": item.title,
+						"address": item.address,
+						"image": item.image,
+					}
+				}
+			})
+		}
+		// 信息弹窗
+		var infoWindow = new TMap.InfoWindow({
+			map: map,
+			enableCustom: true,
+			position: new TMap.LatLng(27.880072, 108.741112),
+			offset: { x: 8, y: 12 }, //设置信息窗相对position偏移像素
+			content: `<div class="info_card">内容</div>`,
+		});
+		infoWindow.close();//初始关闭信息窗关闭
+
+		marker.on('click', (evt) => {
+			// console.log(evt)
+			var newCurGeometry = evt.geometry
+			if (newCurGeometry.properties.title === 'myLocat') {
+				return
+			}
+			if (noOffset) {
+				noOffset = false
+				map.setOffset({ // 中心点偏移
+					x: 0,
+					y: -60,
+				})
+			}
+
+			marker.remove(newCurGeometry.id)
+			if (curGeometry.id) {
+				marker.add([curGeometry])
+			}
+			curGeometry = newCurGeometry // 记录当前节点信息
+			map.easeTo({
+				center: curGeometry.position,
+			})
+
+			//设置infoWindow
+			infoWindow.open(); //打开信息窗
+			infoWindow.setPosition(curGeometry.position);//设置信息窗位置
+			infoWindow.setContent(`<div class="info_card"><img class="img-nav" src="./tileMap/mapImg/${curGeometry.properties.image}.jpg" onerror="this.src='./tileMap/icons/tianRenShanShui.jpg'" ></div>`);//设置信息窗内容
+
+			showPad(curGeometry)
+		})
+
+		// 获取定位
+		var geolocation = new qq.maps.Geolocation();
+		//showPosition  成功之后执行方法
+		//showErr失败之后执行方法
+		//options定位选项设置时间
+		var options = { timeout: 5000 };
+		function showErr(err) {
+			console.log("获取经纬度失败", err);
+			alert('获取经纬度失败,请检查位置信息是否开启?')
+		};
+
+		// 调用地图前往风景区
+		function getCurLocation() {
+			geolocation.getLocation(showPosition, showErr, options);
+		}
+
+		function showPosition(position) {
+			var fromcoord = position.lat + ',' + position.lng
+			var to = curGeometry.properties ? curGeometry.properties.title : ''
+			var tocoord = curGeometry.position ?
+				curGeometry.position.lat + ',' + curGeometry.position.lng :
+				''
+			// console.log(fromcoord, to, tocoord)
+			window.open(`https://apis.map.qq.com/uri/v1/routeplan?type=drive&from=${position.addr}&fromcoord=${fromcoord}&to=${to}&tocoord=${tocoord}&policy=0&referer=${key}`)
+		};
+
+		// 我的位置
+		function myLocation() {
+			geolocation.getLocation(setPosition, showErr, options);
+		}
+
+		function setPosition(position) {
+			marker.updateGeometries(
+				{
+					id: 'myLocat',
+					position: new TMap.LatLng(position.lat, position.lng),
+					properties: { //标注点的属性数据
+						'title': 'myLocat'
+					}
+				}
+			)
+			// console.log(position)
+			map.setCenter(new TMap.LatLng(position.lat, position.lng));
+			map.setZoom(17)
+		}
+
+		const MIX_HEIGHT = 160
+		let padDivHeight = 0
+		let startY = 0
+		let distanceY = 0
+		let baseHeight = 0  // 原始高度
+		const padDiv = document.getElementById('pad')
+		padDiv.style.display = 'block'
+		padDiv.style.bottom = -padDiv.clientHeight + 'px'
+		padDivHeight = padDiv.clientHeight
+
+		let isShowPad = false
+
+		function showPad(curGeometry) {
+			const conText = sceneryIntro[curGeometry.properties.title]
+			if (conText) {
+				const spotcon = document.getElementById('spot-con')
+				spotcon.innerText = conText
+			} else {
+				spotcon.innerText = '此景点暂时没有相关景点介绍。'
+			}
+
+			const spotname = document.getElementById('spot-name')
+			spotname.innerText = curGeometry.properties.title
+
+			const spotAddress = document.getElementById('spot-address')
+			spotAddress.innerText = curGeometry.properties.address
+
+			const spotImage = document.getElementById('spot-image')
+			spotImage.src = `./tileMap/mapImg/${curGeometry.properties.image}.jpg`
+
+			padDivHeight = padDiv.clientHeight
+			// padDiv.style.top = ''
+
+
+			padDiv.addEventListener('touchstart', touchstart, true)
+			padDiv.addEventListener('touchmove', touchmove, true)
+			padDiv.addEventListener('touchend', touchend, true)
+
+			// padDiv1.style.display = 'none'
+			if (isShowPad) {
+				padDiv.style.bottom = -padDivHeight + 'px'
+			} else {
+				padDiv1.style.bottom = - padDivHeight1 + 'px'
+				spotList.scrollTop = 0
+			}
+
+			isShowPad = true
+
+			setTimeout(() => {
+				padDiv.style.bottom = MIX_HEIGHT - padDivHeight + 'px'
+			}, 300)
+		}
+
+		function touchstart(e) {
+			startY = e.touches[0].clientY
+			baseHeight = Math.abs(parseInt(padDiv.style.bottom))
+		}
+
+		function touchmove(e) {
+			e.preventDefault()
+			distanceY = e.touches[0].clientY - startY
+			if (baseHeight === 0 && distanceY < 0) { // 当展示全部的时候，不能再往上滑动，限制住
+				padDiv.style.bottom = 0 + 'px'
+			} else {
+				padDiv.style.bottom = -(baseHeight + distanceY) + 'px'
+			}
+		}
+
+		function touchend(e) {
+			// console.log('end')
+			// 滑动结束时：当滑动的距离大于20，展示全部，反之回去
+			if (distanceY < -50) {
+				padDiv.style.bottom = 10 + 'px'
+			} else if (distanceY > 50) {
+				padDiv.style.bottom = MIX_HEIGHT - padDivHeight + 'px'
+			} else {
+				padDiv.style.bottom = -baseHeight + 'px'
+			}
+			// 移动完成后初始化数据
+			startY = 0
+			distanceY = 0
+		}
+
+		function closePad() {
+			isShowPad = false
+			infoWindow.close()
+			marker.add([curGeometry])
+			curGeometry = {}
+			// padDiv.style.display = 'none'
+
+			padDiv.removeEventListener('touchstart', touchstart)
+			padDiv.removeEventListener('touchmove', touchmove)
+			padDiv.removeEventListener('touchend', touchend)
+
+			padDiv.style.bottom = -padDivHeight + 'px'
+			setTimeout(() => {
+				padDiv1.style.bottom = MIX_HEIGHT1 - padDivHeight1 + 'px'
+			}, 300)
+		}
+
+		const MIX_HEIGHT1 = 160
+		let padDivHeight1 = 0
+		let startY1 = 0
+		let distanceY1 = 0
+		let baseHeight1 = 0  // 原始高度
+		const padDiv1 = document.getElementById('pad_list')
+		padDiv1.style.display = 'block'
+		padDiv1.style.bottom = -padDiv1.clientHeight + 'px'
+		padDivHeight1 = padDiv1.clientHeight
+
+		padDiv1.addEventListener('touchstart', touchstart1, true)
+		padDiv1.addEventListener('touchmove', touchmove1, true)
+		padDiv1.addEventListener('touchend', touchend1, true)
+
+		function touchstart1(e) {
+			startY1 = e.touches[0].clientY
+			baseHeight1 = Math.abs(parseInt(padDiv1.style.bottom))
+		}
+
+		let spotList = document.getElementById('spot-list')
+
+		function touchmove1(e) {
+			distanceY1 = e.touches[0].clientY - startY1
+			if (!spotList.scrollTop && distanceY1 > 0) {
+				e.preventDefault()
+			}
+			if (baseHeight1 === 0 && distanceY1 < 0) { // 当展示全部的时候，不能再往上滑动，限制住
+				padDiv1.style.bottom = 0 + 'px'
+				return
+			}
+			if (!spotList.scrollTop) {
+				padDiv1.style.bottom = -(baseHeight1 + distanceY1) + 'px'
+			}
+		}
+
+		function touchend1(e) {
+			// console.log('end')
+			// 滑动结束时：当滑动的距离大于20，展示全部，反之回去
+			if (distanceY1 < -50) {
+				padDiv1.style.bottom = 10 + 'px'
+				spotList.style.overflowY = 'auto'
+
+			} else if (distanceY1 > 50 && !spotList.scrollTop) {
+				padDiv1.style.bottom = MIX_HEIGHT1 - padDivHeight1 + 'px'
+				spotList.style.overflowY = 'hidden'
+
+			} else {
+				padDiv1.style.bottom = -baseHeight1 + 'px'
+			}
+			// 移动完成后初始化数据
+			startY1 = 0
+			distanceY1 = 0
+		}
+
+		function updateSpotListCon(scenery, init) {
+			// if (!init) {
+			padDiv1.style.bottom = '-100%'
+			// }
+			// let time = init ? 0 : 300
+			let str = ''
+			scenery.forEach(item => {
+				str += `
+                    <div class="spot-list-con">
+                    <div class="spot-list-con-name" onclick="clickLabel('${item.title}')">
+                        <img class="spot-list-con-img" src="./tileMap/mapImg/${item.image}.jpg" alt="" onerror="this.src='./tileMap/icons/tianRenShanShui.jpg'" >
+                        <span class="spot-list-con-title">${item.title}</span>
+                    </div>
+                    <img class="spot-list-con-go" src="./tileMap/icons/go_img.png" onClick="listGetCurLocation('${item.title}')" alt="">
+                    </div>
+                    `
+			});
+
+			if (isShowPad) {
+				closePad()
+			}
+
+			setTimeout(() => {
+				document.getElementById('spot-list-cons').innerHTML = str
+				padDivHeight1 = padDiv1.clientHeight
+				padDiv1.style.bottom = MIX_HEIGHT1 - padDiv1.clientHeight + 'px'
+			}, 300)
+		}
+
+		function clickLabel(id) {
+			var geometry = marker.getGeometryById(`marker-${id}`)
+			console.log(geometry, `marker-${id}`)
+			var newCurGeometry = geometry
+			if (newCurGeometry === null) {
+				showPad(curGeometry)
+				return
+			}
+			if (newCurGeometry.id === curGeometry.id || newCurGeometry.properties.title === 'myLocat') {
+				return
+			}
+			if (noOffset) {
+				noOffset = false
+				map.setOffset({ // 中心点偏移
+					x: 0,
+					y: -60,
+				})
+			}
+
+			marker.remove(newCurGeometry.id)
+			if (curGeometry.id) {
+				marker.add([curGeometry])
+			}
+			curGeometry = newCurGeometry // 记录当前节点信息
+			map.easeTo({
+				center: curGeometry.position,
+			})
+
+			//设置infoWindow
+			infoWindow.open(); //打开信息窗
+			infoWindow.setPosition(curGeometry.position);//设置信息窗位置
+			infoWindow.setContent(`<div class="info_card"><img class="img-nav" src="./tileMap/mapImg/${curGeometry.properties.image}.jpg" onerror="this.src='./tileMap/icons/tianRenShanShui.jpg'" ></div>`);//设置信息窗内容
+
+			showPad(curGeometry)
+		}
+
+		/**
+		 *  调用定位方法
+		 *  微信小城内嵌调用微信小程序方法 ， 
+		 *  H5 则调用H5 方法
+		 * 
+		 */
+
+		function listGetCurLocation(id) {
+
+			var geometry = label.getGeometryById(`label-${id}`)
+
+			geolocation.getLocation((position) => {
+				var fromcoord = position.lat + ',' + position.lng
+				var to = geometry.properties ? geometry.properties.title : ''
+				var tocoord = geometry.position ?
+					geometry.position.lat + ',' + geometry.position.lng :
+					''
+				// window.open(`https://apis.map.qq.com/uri/v1/routeplan?type=drive&from=${position.addr}&fromcoord=${fromcoord}&to=${to}&tocoord=${tocoord}&policy=0&referer=${key}`)
+				window.open(`qqmap://map/routeplan?type=drive&from=${position.addr}&fromcoord=${fromcoord}&to=${to}&tocoord=${tocoord}&policy=0&referer=${key}`)
+			}, showErr, options);
+		}
+
+		window.onload = () => {
+			setTimeout(() => {
+				updateSpotListCon(scenery, true)
+			}, 200)
+		}
+
+	</script>
+
+
+</body>
+
 </html>
