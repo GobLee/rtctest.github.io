@@ -1996,8 +1996,8 @@
 				var tocoord = geometry.position ?
 					geometry.position.lat + ',' + geometry.position.lng :
 					''
-				window.open(`https://apis.map.qq.com/uri/v1/routeplan?type=drive&from=${position.addr}&fromcoord=${fromcoord}&to=${to}&tocoord=${tocoord}&policy=0&referer=${key}`)
-				// window.open(`qqmap://map/routeplan?type=drive&from=${position.addr}&fromcoord=${fromcoord}&to=${to}&tocoord=${tocoord}&policy=0&referer=${key}`)
+				// window.open(`https://apis.map.qq.com/uri/v1/routeplan?type=drive&from=${position.addr}&fromcoord=${fromcoord}&to=${to}&tocoord=${tocoord}&policy=0&referer=${key}`)
+				window.open(`qqmap://map/routeplan?type=drive&from=${position.addr}&fromcoord=${fromcoord}&to=${to}&tocoord=${tocoord}&policy=0&referer=${key}`)
 			}, showErr, options);
 		}
 
