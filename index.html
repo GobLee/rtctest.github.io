@@ -1829,7 +1829,6 @@
 		}
 
 		function touchend(e) {
-			// console.log('end')
 			// 滑动结束时：当滑动的距离大于20，展示全部，反之回去
 			if (distanceY < -50) {
 				padDiv.style.bottom = 10 + 'px'
@@ -1990,11 +1989,9 @@
 
 			var geometry = label.getGeometryById(`label-${id}`)
 
-			
-
 			geolocation.getLocation((position) => {
 				var fromcoord = position.lat + ',' + position.lng
-
+ 				alert(parseInt(position.lat))
 				wx.openLocation({
 				  latitude: parseInt(position.lat), // 纬度，浮点数，范围为90 ~ -90
 				  longitude: parseInt(position.lng), // 经度，浮点数，范围为180 ~ -180。
