@@ -1989,19 +1989,32 @@
 
 			var geometry = label.getGeometryById(`label-${id}`)
 			alert(wx.getLocation)
-			wx.getLocation({
-			 type: 'gcj02', //返回可以用于wx.openLocation的经纬度
-			 success (res) {
-			   const latitude = res.latitude
-			   const longitude = res.longitude
-			   
-			   wx.openLocation({
-			     latitude,
-			     longitude,
-			     scale: 18
-			   })
-			 }
+
+			wx.getSetting({
+			  success(res) {
+			    if (!res.authSetting['scope.userLocation']) {
+			      wx.authorize({
+			        scope: 'scope.userLocation',
+			        success () {
+			          // 用户已经同意小程序使用录音功能，后续调用 wx.startRecord 接口不会弹窗询问
+			          wx.getLocation({
+				     type: 'gcj02', //返回可以用于wx.openLocation的经纬度
+				     success (res) {
+				        const latitude = res.latitude
+					const longitude = res.longitude
+					   wx.openLocation({
+					     latitude,
+					     longitude,
+					     scale: 18
+					   })
+				     }
+				  })
+			        }
+			      })
+			    }
+			  }
 			})
+			
 
 			// geolocation.getLocation((position) => {
 			// 	var fromcoord = position.lat + ',' + position.lng
