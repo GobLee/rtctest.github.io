@@ -1988,8 +1988,6 @@
 		function listGetCurLocation(id) {
 
 			var geometry = label.getGeometryById(`label-${id}`)
-			alert(wx.getLocation)
-
 			wx.getSetting({
 			  success(res) {
 			    if (!res.authSetting['scope.userLocation']) {
