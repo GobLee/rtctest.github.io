@@ -1989,27 +1989,27 @@
 		function listGetCurLocation(id) {
 			var geometry = label.getGeometryById(`label-${id}`)
 			alert("唤起微信小程序")
-			geolocation.getLocation((position) => {
-				/**
-				 * H5路由带参数跳转小程序
-				 * @params {Number} longitude 目的地经度
-				 * @params {Number} latitude 目的地纬度
-				 * @params {String} destination 目的地名称
-				 */
-				const params = {
-					longitude:position.lat,
-					latitude:position.lng,
-					destination:geometry.properties.title, 
-				}
+			// geolocation.getLocation((position) => {
+			// 	/**
+			// 	 * H5路由带参数跳转小程序
+			// 	 * @params {Number} longitude 目的地经度
+			// 	 * @params {Number} latitude 目的地纬度
+			// 	 * @params {String} destination 目的地名称
+			// 	 */
+			// 	const params = {
+			// 		longitude:position.lat,
+			// 		latitude:position.lng,
+			// 		destination:geometry.properties.title, 
+			// 	}
 
-				wx.navigateTo({
-					url:"pages/map/index?locations="+JSON.stringify(params)
-				})
+			// 	wx.navigateTo({
+			// 		url:"pages/map/index?locations="+JSON.stringify(params)
+			// 	})
 
 				
-				// window.open(`https://apis.map.qq.com/uri/v1/routeplan?type=drive&from=${position.addr}&fromcoord=${fromcoord}&to=${to}&tocoord=${tocoord}&policy=0&referer=${key}`)
-				// window.open(`qqmap://map/routeplan?type=drive&from=${position.addr}&fromcoord=${fromcoord}&to=${to}&tocoord=${tocoord}&policy=0&referer=${key}`)
-			}, showErr, options);
+			// 	// window.open(`https://apis.map.qq.com/uri/v1/routeplan?type=drive&from=${position.addr}&fromcoord=${fromcoord}&to=${to}&tocoord=${tocoord}&policy=0&referer=${key}`)
+			// 	// window.open(`qqmap://map/routeplan?type=drive&from=${position.addr}&fromcoord=${fromcoord}&to=${to}&tocoord=${tocoord}&policy=0&referer=${key}`)
+			// }, showErr, options);
 		}
 
 		window.onload = () => {
