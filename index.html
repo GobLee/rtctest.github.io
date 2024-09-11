@@ -1987,6 +1987,7 @@
 		function listGetCurLocation(id) {
 			var geometry = label.getGeometryById(`label-${id}`)
 			geolocation.getLocation((position) => {
+				console.log(position)
 				/**
 				 * H5路由带参数跳转小程序
 				 * @params {Number} longitude 目的地经度
