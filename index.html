@@ -1995,9 +1995,10 @@
 				 * @params {String} destination 目的地名称
 				 */
 				const params = {
-					longitude:position.lat,
-					latitude:position.lng,
-					destination:geometry.properties.title, 
+					longitude: geometry.position.lat,
+					latitude: geometry.position.lng,
+					destination: geometry.properties.title,
+					address: geometry.properties.address
 				}
 
 				wx.miniProgram.navigateTo({
