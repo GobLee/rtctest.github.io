@@ -1735,6 +1735,22 @@
 			var tocoord = curGeometry.position ?
 				curGeometry.position.lat + ',' + curGeometry.position.lng :
 				''
+			/**
+				 * H5路由带参数跳转小程序
+				 * @params {Number} longitude 目的地经度
+				 * @params {Number} latitude 目的地纬度
+				 * @params {String} destination 目的地名称
+				 */
+				const params = {
+					longitude: curGeometry.position.lng,
+					latitude: curGeometry.position.lat,
+					destination: curGeometry.properties.title,
+					address: curGeometry.properties.address
+				}
+
+				wx.miniProgram.navigateTo({
+					url:"/pages/map/index?locations="+encodeURIComponent(JSON.stringify(params))
+				})
 			// console.log(fromcoord, to, tocoord)
 			window.open(`https://apis.map.qq.com/uri/v1/routeplan?type=drive&from=${position.addr}&fromcoord=${fromcoord}&to=${to}&tocoord=${tocoord}&policy=0&referer=${key}`)
 		};
